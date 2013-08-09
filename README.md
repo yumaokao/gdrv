@@ -9,4 +9,4 @@ Yu Mao Kao (yumaokao)
 
 Reference
 ============
-[[https://github.com/prasmussen/gdrive|gdrive]]
+[gdrive](https://github.com/prasmussen/gdrive)
