@@ -1,4 +1,6 @@
 *.py[cod]
+credentials.dat
+*.swp
 
 # C extensions
 *.so
