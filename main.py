@@ -5,6 +5,7 @@ import sys
 import argparse
 import re
 import logging
+from command_list import CommandList
 
 
 lg = logging.getLogger("DRIVE_MAIN")
@@ -16,35 +17,24 @@ ch.setFormatter(formatter)
 lg.addHandler(ch)
 
 
-drive_commands = ['info', 'list']
-
-
-def command_list():
-    lg.debug("YMK command_list!!!")
-    parser = argparse.ArgumentParser(
-        description='YMK google drive command line tool -- list')
-    parser.add_argument('list', nargs='+')
-    parser.add_argument('-q', '--query', help='filter with query string.')
-    args = parser.parse_args()
-    if args.list[0] != 'list':
-        print parser.print_help()
-    if len(args.list) > 1 and args.list[1] == 'help':
-        print parser.print_help()
-
-    lg.debug(args)
+drive_commands = []
+#drive_commands1 = [CommandList]
 
 
 def main():
+    global drive_commands
+
     lg.debug("YMK Goodbye World!!!")
     parser = argparse.ArgumentParser(
         description='YMK google drive command line tool')
-    parser.add_argument('command', nargs=1, choices=drive_commands)
-    parser.add_argument('others', nargs='?')
-    args = parser.parse_args()
+    #parser.add_argument('command', nargs=1, choices=drive_commands)
+    #parser.add_argument('others', nargs='?')
+    subparser = parser.add_subparsers(help='drive sub command')
 
-    lg.debug(args.command)
-    if args.command[0] == 'list':
-        command_list()
+    drive_commands = [CommandList(subparser)]
+
+    args = parser.parse_args()
+    lg.debug(args)
 
 
 if __name__ == '__main__':

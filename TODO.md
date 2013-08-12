@@ -13,9 +13,10 @@ TODO
     [add_subparsers]('http://docs.python.org/dev/library/argparse.html#sub-commands')
 
 1. command class:
-    1. parent class
-        * add_subparsers
-        * command_action
+    1. parent class [OK]
+        * add_subparsers [OK]
+        * command_action [OK]
+    1. child command class: list
 
 
 <!--
