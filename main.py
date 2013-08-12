@@ -24,6 +24,7 @@ def command_list():
     parser = argparse.ArgumentParser(
         description='YMK google drive command line tool -- list')
     parser.add_argument('list', nargs='+')
+    parser.add_argument('-q', '--query', help='filter with query string.')
     args = parser.parse_args()
     if args.list[0] != 'list':
         print parser.print_help()
