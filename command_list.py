@@ -21,3 +21,6 @@ class CommandList(DriveCommand):
         self.cmdparser.add_argument('help', nargs='?')
         self.cmdparser.add_argument('-q', '--query',
                                     help='filter by query string')
+
+    def do_command(self):
+        lg.debug("YMK in do_command")

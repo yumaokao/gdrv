@@ -11,3 +11,6 @@ class DriveCommand():
 
     def init_cmdparser(self):
         self.cmdparser = None
+
+    def do_command(self):
+        pass

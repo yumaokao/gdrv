@@ -17,8 +17,7 @@ ch.setFormatter(formatter)
 lg.addHandler(ch)
 
 
-drive_commands = []
-#drive_commands1 = [CommandList]
+drive_commands = {}
 
 
 def main():
@@ -29,12 +28,15 @@ def main():
         description='YMK google drive command line tool')
     #parser.add_argument('command', nargs=1, choices=drive_commands)
     #parser.add_argument('others', nargs='?')
-    subparser = parser.add_subparsers(help='drive sub command')
+    subparser = parser.add_subparsers(help='drive sub command',
+                                      dest='command_name')
 
-    drive_commands = [CommandList(subparser)]
+    drive_commands = {'list': CommandList(subparser)}
 
     args = parser.parse_args()
+    #args.func(args)
     lg.debug(args)
+    drive_commands[args.command_name].do_command()
 
 
 if __name__ == '__main__':
