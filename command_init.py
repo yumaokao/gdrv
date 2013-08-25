@@ -1,10 +1,9 @@
 #!/usr/bin/python
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 import logging
-import global_mod as gm
 from command_base import DriveCommand
 
-lg = logging.getLogger("LIST")
+lg = logging.getLogger("INIT")
 lg.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
@@ -13,12 +12,12 @@ ch.setFormatter(formatter)
 lg.addHandler(ch)
 
 
-class CommandList(DriveCommand):
+class CommandInit(DriveCommand):
     """ A Drive Command Class """
 
     def init_cmdparser(self):
         ## python2.7 lack of aliases of add_parser in sub command.
-        self.cmdparser = self.subparser.add_parser('list',
+        self.cmdparser = self.subparser.add_parser('init',
                                                    help='command list help')
         self.cmdparser.add_argument('queries', nargs='?',
                                     help='other query string for search files')
