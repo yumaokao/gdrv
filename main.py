@@ -35,7 +35,7 @@ def load_default_config():
     gm.config.set('api', 'scope', 'https://www.googleapis.com/auth/drive')
 
 
-def get_config():
+def get_config(args=None):
     load_default_config()
     lg.debug("YMK dump config api ")
     lg.debug(gm.config.items('api'))
@@ -58,7 +58,8 @@ def main():
 
     parser = argparse.ArgumentParser(
         description='YMK google drive command line tool')
-    #parser.add_argument('-f', '')
+    parser.add_argument('-w', '--write-config', action='store_true',
+                        help='write a default config')
     subparser = parser.add_subparsers(help='drive sub command',
                                       dest='command_name')
 
@@ -67,7 +68,7 @@ def main():
 
     args = parser.parse_args()
 
-    get_config()
+    get_config(args)
 
     drive_commands[args.command_name].do_command(args)
 
