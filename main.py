@@ -30,13 +30,16 @@ def load_default_config():
     gm.config.add_section('api')
     gm.config.set('api', 'client_id',
                   '741789474926.apps.googleusercontent.com')
-    gm.config.set('api', 'client_serect', 'ZZI0GSvLNLEHYUNsBsrmkG2y')
+    gm.config.set('api', 'client_secret', 'ZZI0GSvLNLEHYUNsBsrmkG2y')
     gm.config.set('api', 'redirect_url', 'http://127.0.0.1')
     gm.config.set('api', 'scope', 'https://www.googleapis.com/auth/drive')
+    gm.config.set('api', 'storage', '~/.drivegoogle/credentials.dat')
 
 
 def get_config(args=None):
     load_default_config()
+
+    ## YMK TODO: -f filename and -w filename
     lg.debug("YMK dump config api ")
     lg.debug(gm.config.items('api'))
     last_cfg_name = ""
@@ -45,10 +48,15 @@ def get_config(args=None):
         lg.debug("YMK config file check %s", cfg_name)
         if os.path.exists(cfg_name):
             last_cfg_name = cfg_name
-    if last_cfg_name == "":
-        new_cfg_name = os.path.expanduser(gm.config_paths[0] + '.' +
-                                          gm.app_name + 'rc')
-        lg.debug("YMK let's make a new one %s", new_cfg_name)
+            gm.config.read(cfg_name)
+
+    if args.write_config is True:
+        if last_cfg_name == "":
+            new_cfg_name = os.path.expanduser(gm.config_paths[0] + '.' +
+                                              gm.app_name + 'rc')
+            lg.debug("YMK let's make a new one %s", new_cfg_name)
+            with open(new_cfg_name, 'w+') as configfile:
+                gm.config.write(configfile)
 
 
 def main():
