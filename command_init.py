@@ -1,10 +1,14 @@
 #!/usr/bin/python
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
+import os
 import logging
 import webbrowser
+import httplib2
 import global_mod as gm
 from command_base import DriveCommand
 
+from apiclient import errors
+from apiclient.discovery import build
 from oauth2client.file import Storage
 from oauth2client.client import AccessTokenRefreshError
 from oauth2client.client import OAuth2WebServerFlow
@@ -53,7 +57,8 @@ class CommandInit(DriveCommand):
                                    gm.config.get('api', 'client_secret'),
                                    gm.config.get('api', 'scope'),
                                    "http://127.0.0.1")
-        storage = Storage(gm.config.get('api', 'storage'))
+        ## YMK TODO: mkdir -p
+        storage = Storage(os.path.expanduser(gm.config.get('api', 'storage')))
         credentials = storage.get()
         if credentials is None or credentials.invalid:
             auth_uri = flow.step1_get_authorize_url()
@@ -64,3 +69,24 @@ class CommandInit(DriveCommand):
             credentials = flow.step2_exchange(code)
             if credentials:
                 storage.put(credentials)
+
+        http = httplib2.Http()
+        http = credentials.authorize(http)
+        gm.service = build('drive', 'v2', http=http)
+        self.print_about(gm.service)
+
+    def print_about(self, service):
+        """Print information about the user along with the Drive API settings.
+
+        Args:
+          service: Drive API service instance.
+        """
+        try:
+            about = service.about().get().execute()
+
+            print 'Current user name: %s' % about['name']
+            print 'Root folder ID: %s' % about['rootFolderId']
+            print 'Total quota (bytes): %s' % about['quotaBytesTotal']
+            print 'Used quota (bytes): %s' % about['quotaBytesUsed']
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
