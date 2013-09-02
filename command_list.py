@@ -2,7 +2,7 @@
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 import logging
 import global_mod as gm
-from command_base import DriveCommand
+from command_base import DriveCommand, DriveServiceCommand
 
 lg = logging.getLogger("LIST")
 lg.setLevel(logging.DEBUG)
@@ -13,7 +13,7 @@ ch.setFormatter(formatter)
 lg.addHandler(ch)
 
 
-class CommandList(DriveCommand):
+class CommandList(DriveServiceCommand):
     """ A Drive Command Class """
 
     def init_cmdparser(self):
@@ -37,6 +37,6 @@ class CommandList(DriveCommand):
                                     help='full text of the file including'
                                          'title, description, and content')
 
-    def do_command(self, args=None):
+    def do_service_command(self):
         lg.debug("YMK in do_command")
-        lg.debug(args)
+        lg.debug(self.args)

@@ -47,9 +47,9 @@ class CommandInit(DriveCommand):
                                     help='full text of the file including'
                                          'title, description, and content')
 
-    def do_command(self, args=None):
+    def do_drive_command(self):
         lg.debug("YMK in do_command")
-        lg.debug(args)
+        lg.debug(self.args)
         lg.debug("YMK dump config api ")
         lg.debug(gm.config.items('api'))
 
@@ -75,6 +75,7 @@ class CommandInit(DriveCommand):
         gm.service = build('drive', 'v2', http=http)
         self.print_about(gm.service)
 
+## private methods ##
     def print_about(self, service):
         """Print information about the user along with the Drive API settings.
 

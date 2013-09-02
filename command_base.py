@@ -13,4 +13,18 @@ class DriveCommand():
         self.cmdparser = None
 
     def do_command(self, args=None):
+        self.args = args
+        self.do_drive_command()
+
+    def do_drive_command(self):
+        pass
+
+
+class DriveServiceCommand(DriveCommand):
+    """ A Drive Service Command Class """
+
+    def do_drive_command(self):
+        self.do_service_command()
+
+    def do_service_command(self):
         pass
