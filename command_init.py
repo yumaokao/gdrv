@@ -21,6 +21,7 @@ ch.setLevel(logging.DEBUG)
 formatter = logging.Formatter('[%(name)s] %(levelname)s - %(message)s')
 ch.setFormatter(formatter)
 lg.addHandler(ch)
+logging.getLogger('oauth2client.util').addHandler(ch)
 
 
 class CommandInit(DriveCommand):
@@ -53,10 +54,11 @@ class CommandInit(DriveCommand):
         lg.debug("YMK dump config api ")
         lg.debug(gm.config.items('api'))
 
-        flow = OAuth2WebServerFlow(gm.config.get('api', 'client_id'),
+        flow = OAuth2WebServerFlow(client_id=gm.config.get('api', 'client_id'),
+                                   client_secret=
                                    gm.config.get('api', 'client_secret'),
-                                   gm.config.get('api', 'scope'),
-                                   "http://127.0.0.1")
+                                   scope=gm.config.get('api', 'scope'),
+                                   redirect_uri="http://127.0.0.1")
         ## YMK TODO: mkdir -p
         storage = Storage(os.path.expanduser(gm.config.get('api', 'storage')))
         credentials = storage.get()
