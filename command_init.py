@@ -5,7 +5,7 @@ import logging
 import webbrowser
 import httplib2
 import global_mod as gm
-from command_base import DriveCommand
+from command_base import DriveServiceCommand
 
 from apiclient import errors
 from apiclient.discovery import build
@@ -24,7 +24,7 @@ lg.addHandler(ch)
 logging.getLogger('oauth2client.util').addHandler(ch)
 
 
-class CommandInit(DriveCommand):
+class CommandInit(DriveServiceCommand):
     """ A Drive Command Class """
 
     def init_cmdparser(self):
@@ -60,22 +60,23 @@ class CommandInit(DriveCommand):
                                    scope=gm.config.get('api', 'scope'),
                                    redirect_uri="http://127.0.0.1")
         ## YMK TODO: mkdir -p
-        storage = Storage(os.path.expanduser(gm.config.get('api', 'storage')))
-        credentials = storage.get()
-        if credentials is None or credentials.invalid:
+        self.get_credentials()
+        if self.credentials is None or self.credentials.invalid:
             auth_uri = flow.step1_get_authorize_url()
             print "Please goto this link: [%s]" % auth_uri
             webbrowser.open_new_tab(auth_uri)
             ## YMK TODO: a http web page with clipbaord js for easy copy
             code = raw_input("Enter verrification code: ").strip()
-            credentials = flow.step2_exchange(code)
-            if credentials:
-                storage.put(credentials)
+            self.credentials = flow.step2_exchange(code)
+            if self.credentials:
+                self.storage.put(self.credentials)
 
-        http = httplib2.Http()
-        http = credentials.authorize(http)
-        gm.service = build('drive', 'v2', http=http)
-        self.print_about(gm.service)
+        self.get_service()
+        if self.service is not None:
+            self.do_service_command()
+
+    def do_service_command(self):
+        self.print_about(self.service)
 
 ## private methods ##
     def print_about(self, service):

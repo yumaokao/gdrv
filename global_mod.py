@@ -4,4 +4,4 @@
 app_name = 'drivegoogle'
 config_paths = ['~/', './']
 config = None
-service = None
+#service = None

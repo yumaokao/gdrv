@@ -2,7 +2,7 @@
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 import logging
 import global_mod as gm
-from command_base import DriveCommand, DriveServiceCommand
+from command_base import DriveServiceCommand
 
 lg = logging.getLogger("LIST")
 lg.setLevel(logging.DEBUG)
