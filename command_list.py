@@ -2,6 +2,7 @@
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 import logging
 import global_mod as gm
+from apiclient import errors
 from command_base import DriveServiceCommand
 
 lg = logging.getLogger("LIST")
@@ -38,5 +39,44 @@ class CommandList(DriveServiceCommand):
                                          'title, description, and content')
 
     def do_service_command(self):
+        """list files
+        """
+
         lg.debug("YMK in do_command")
         lg.debug(self.args)
+
+        files = self.retrieve_files()
+        for fl in files:
+            print fl
+            #print "%s, %s, %s" % (fl['title'], fl['id'], fl['mimeType'])
+            #print "%s, %s, %d, %s" % (fl['title'], fl['id'], fl['fileSize'], fl['mimeType'])
+
+
+## private methods ##
+    def retrieve_files(self, query =""):
+        """Retrieve a list of File resources.
+
+        Args:
+          service: Drive API service instance.
+        Returns:
+          List of File resources.
+        """
+        result = []
+        page_token = None
+        while True:
+            try:
+                param = {}
+                if query != "":
+                    param['q'] = "title contains '%s'" % (query)
+                if page_token:
+                    param['pageToken'] = page_token
+                files = self.service.files().list(**param).execute()
+
+                result.extend(files['items'])
+                page_token = files.get('nextPageToken')
+                if not page_token:
+                    break
+            except errors.HttpError, error:
+                print 'An error occurred: %s' % error
+                break
+        return result
