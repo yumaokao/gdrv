@@ -11,6 +11,7 @@ import ConfigParser
 import global_mod as gm
 from command_list import CommandList
 from command_init import CommandInit
+from command_push import CommandPush
 
 
 lg = logging.getLogger("DRIVE_MAIN")
@@ -72,6 +73,7 @@ def main():
                                       dest='command_name')
 
     drive_commands = {'list': CommandList(subparser),
+                      'push': CommandPush(subparser),
                       'init': CommandInit(subparser)}
 
     args = parser.parse_args()
