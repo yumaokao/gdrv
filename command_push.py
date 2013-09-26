@@ -36,13 +36,19 @@ class CommandPush(DriveServiceCommand):
         lg.debug("YMK in do_command")
         lg.debug(self.args)
         sys.stderr.write("YMK STDERR\n")
+        print "dst %s" % self.args.dst
         for src in self.args.src:
             if os.path.exists(src):
                 print "%s exists" % src
 
 
 ## private methods ##
-    def retrieve_files(self, query =""):
+    def find_dst_dir(self):
+        dstdir = self.args.dst[0]
+        parents = False
+
+
+    def retrieve_files(self, query=""):
         """Retrieve a list of File resources.
 
         Args:
