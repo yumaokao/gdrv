@@ -37,6 +37,7 @@ class CommandPush(DriveServiceCommand):
         lg.debug(self.args)
         sys.stderr.write("YMK STDERR\n")
         print "dst %s" % self.args.dst
+        self.find_dst_dir()
         for src in self.args.src:
             if os.path.exists(src):
                 print "%s exists" % src
@@ -46,6 +47,8 @@ class CommandPush(DriveServiceCommand):
     def find_dst_dir(self):
         dstdir = self.args.dst[0]
         parents = False
+        dirs = self.args.dst[0].split('/')
+        print "dirs %s" % dirs
 
 
     def retrieve_files(self, query=""):
