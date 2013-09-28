@@ -54,3 +54,62 @@ class DriveServiceCommand(DriveCommand):
 
     def do_service_command(self):
         pass
+
+## basic drive apis ##
+    def file_list(self, query=""):
+        """Retrieve a list of File resources.
+
+        Args:
+          service: Drive API service instance.
+        Returns:
+          List of File resources.
+        """
+        result = []
+        page_token = None
+        while True:
+            try:
+                param = {}
+                if query != "":
+                    param['q'] = query
+                if page_token:
+                    param['pageToken'] = page_token
+                files = self.service.files().list(**param).execute()
+
+                result.extend(files['items'])
+                page_token = files.get('nextPageToken')
+                if not page_token:
+                    break
+            except errors.HttpError, error:
+                print 'An error occurred: %s' % error
+                break
+        return result
+
+    def children_list(self, parent="root", query=""):
+        """Retrieve a list of File resources.
+
+        Args:
+          parent: parent id or alias 'root'
+          query: query string
+        Returns:
+          List of File resources.
+        """
+        result = []
+        page_token = None
+        while True:
+            try:
+                param = {}
+                if query != "":
+                    param['q'] = query
+                if page_token:
+                    param['pageToken'] = page_token
+                files = self.service.children().list(
+                    folderId=parent, **param).execute()
+
+                result.extend(files['items'])
+                page_token = files.get('nextPageToken')
+                if not page_token:
+                    break
+            except errors.HttpError, error:
+                print 'An error occurred: %s' % error
+                break
+        return result

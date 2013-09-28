@@ -49,11 +49,9 @@ class CommandList(DriveServiceCommand):
         for fl in files:
             print fl
             #print "%s, %s, %s" % (fl['title'], fl['id'], fl['mimeType'])
-            #print "%s, %s, %d, %s" % (fl['title'], fl['id'], fl['fileSize'], fl['mimeType'])
-
 
 ## private methods ##
-    def retrieve_files(self, query =""):
+    def retrieve_files(self, query=""):
         """Retrieve a list of File resources.
 
         Args:

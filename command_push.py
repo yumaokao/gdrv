@@ -35,46 +35,55 @@ class CommandPush(DriveServiceCommand):
 
         lg.debug("YMK in do_command")
         lg.debug(self.args)
-        sys.stderr.write("YMK STDERR\n")
-        print "dst %s" % self.args.dst
-        self.find_dst_dir()
+        #sys.stderr.write("YMK STDERR\n")
+        parentid = self.find_dst_dir()
         for src in self.args.src:
             if os.path.exists(src):
-                print "%s exists" % src
-
+                lg.debug("%s exists" % src)
+        dirs = self.args.dst[0].split('/')
+        title = dirs[-1]
+        if title == "":
+            title = os.path.basename(src)
+        lg.debug("title %s put in %s" % (title, parentid))
+        ## TODO check file exists
 
 ## private methods ##
     def find_dst_dir(self):
         dstdir = self.args.dst[0]
         parents = False
         dirs = self.args.dst[0].split('/')
-        print "dirs %s" % dirs
 
+        parentid = 'root'
+        for aidx in range(len(dirs) - 1):
+            lg.debug("dirs[%d] %s" % (aidx, dirs[aidx]))
+            if aidx == 0 and dirs[0] == '':
+                continue
+            children_dirs = self.check_children_dirs(dirs[aidx], parentid)
+            dirs_nums = len(children_dirs)
+            if dirs_nums == 0:
+                lg.debug("I can't find the dir %s" % (dirs[aidx]))
+            elif dirs_nums > 1:
+                lg.warn("I find %d %s" % (dirs_nums, dirs[aidx]))
+            parentid = children_dirs[0]['id']
+        return parentid
 
-    def retrieve_files(self, query=""):
-        """Retrieve a list of File resources.
+    def check_children_dirs(self, dirname, parent="root"):
+        query = "mimeType = 'application/vnd.google-apps.folder'"
+        query += " and title = '%s'" % dirname
+        query += " and '%s' in parents" % parent
+        lg.debug("query %s" % query)
+        children_dirs = self.file_list(query)
+        #for adir in children_dirs:
+        #    lg.debug("children %s id %s" % (adir['title'], adir['id']))
+        return children_dirs
 
-        Args:
-          service: Drive API service instance.
-        Returns:
-          List of File resources.
-        """
-        result = []
-        page_token = None
-        while True:
-            try:
-                param = {}
-                if query != "":
-                    param['q'] = "title contains '%s'" % (query)
-                if page_token:
-                    param['pageToken'] = page_token
-                files = self.service.files().list(**param).execute()
+    def get_children_dirs(self, parent="root"):
+        query += " and '%s' in parents" % parent
+        #return self.children_list(parent, query)
+        return self.file_list(query)
 
-                result.extend(files['items'])
-                page_token = files.get('nextPageToken')
-                if not page_token:
-                    break
-            except errors.HttpError, error:
-                print 'An error occurred: %s' % error
-                break
-        return result
+        query = "mimeType = 'application/vnd.google-apps.folder'"
+
+    def get_all_dirs(self):
+        query = "mimeType = 'application/vnd.google-apps.folder'"
+        return self.file_list(query)
