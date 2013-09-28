@@ -17,6 +17,8 @@ TODO
         * add_subparsers [OK]
         * command_action [OK]
     1. child command class: list
+    1. child command class: init
+    1. child command class: push
 
 
 <!--

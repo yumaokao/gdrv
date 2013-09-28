@@ -59,7 +59,7 @@ class CommandInit(DriveServiceCommand):
                                    gm.config.get('api', 'client_secret'),
                                    scope=gm.config.get('api', 'scope'),
                                    redirect_uri="http://127.0.0.1")
-        ## YMK TODO: mkdir -p
+
         self.get_credentials()
         if self.credentials is None or self.credentials.invalid:
             auth_uri = flow.step1_get_authorize_url()
@@ -69,6 +69,10 @@ class CommandInit(DriveServiceCommand):
             code = raw_input("Enter verrification code: ").strip()
             self.credentials = flow.step2_exchange(code)
             if self.credentials:
+                filename = os.path.expanduser(gm.config.get('api', 'storage'))
+                dirname = os.path.dirname(filename)
+                if not os.path.exists(dirname):
+                    os.makedirs(dirname)
                 self.storage.put(self.credentials)
 
         self.get_service()
