@@ -5,6 +5,7 @@ import sys
 import logging
 import global_mod as gm
 from apiclient import errors
+from apiclient.http import MediaFileUpload
 from command_base import DriveServiceCommand
 
 lg = logging.getLogger("PUSH")
@@ -37,33 +38,74 @@ class CommandPush(DriveServiceCommand):
         lg.debug(self.args)
         #sys.stderr.write("YMK STDERR\n")
         parentid = self.find_dst_dir()
+
+        ## check src files exists in local
         for src in self.args.src:
             if os.path.exists(src):
                 lg.debug("%s exists" % src)
-        dirs = self.args.dst[0].split('/')
-        title = dirs[-1]
-        if title == "":
+
+        ## TODO check files exist in drive
+        ## TODO to create or update
+
+        for src in self.args.src:
             title = os.path.basename(src)
-        lg.debug("title %s put in %s" % (title, parentid))
-        ## TODO check file exists
+            #lg.debug("title %s put in %s" % (title, parentid))
+            afile = self.file_insert(src, title, parentid)
+            if afile is None or not afile['title'] == title:
+                lg.error("File %s push error", src)
+            else:
+                lg.debug("File %s pushed in drive as id %s" % (
+                    afile['title'], afile['id']))
 
 ## private methods ##
+    def file_insert(self, filename, title, parent_id):
+        """Insert new file.
+
+        Args:
+            title: Title of the file to insert, including the extension.
+            parent_id: Parent folder's ID.
+            filename: Filename of the file to insert.
+        Returns:
+            Inserted file metadata if successful, None otherwise.
+        """
+
+        media_body = MediaFileUpload(filename, resumable=True)
+        ## TODO: add optioneal properties.
+        #'description': description,
+        #'mimeType': mime_type
+        body = {
+            'title': title
+            }
+        # Set the parent folder.
+        if parent_id:
+            body['parents'] = [{'id': parent_id}]
+
+        try:
+            file = self.service.files().insert(
+                body=body,
+                media_body=media_body).execute()
+            return file
+        except errors.HttpError, error:
+            lg.error('An error occured: %s' % error)
+            return None
+
     def find_dst_dir(self):
         dstdir = self.args.dst[0]
         parents = False
         dirs = self.args.dst[0].split('/')
 
         parentid = 'root'
-        for aidx in range(len(dirs) - 1):
+        for aidx in range(len(dirs)):
             lg.debug("dirs[%d] %s" % (aidx, dirs[aidx]))
             if aidx == 0 and dirs[0] == '':
                 continue
             children_dirs = self.check_children_dirs(dirs[aidx], parentid)
             dirs_nums = len(children_dirs)
             if dirs_nums == 0:
-                lg.debug("I can't find the dir %s" % (dirs[aidx]))
+                lg.debug("Can't find directory %s" % (dirs[aidx]))
             elif dirs_nums > 1:
-                lg.warn("I find %d %s" % (dirs_nums, dirs[aidx]))
+                lg.warn("Find %d instances of directory %s" % (
+                    dirs_nums, dirs[aidx]))
             parentid = children_dirs[0]['id']
         return parentid
 
