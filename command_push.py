@@ -38,6 +38,9 @@ class CommandPush(DriveServiceCommand):
         lg.debug(self.args)
         #sys.stderr.write("YMK STDERR\n")
         parentid = self.find_dst_dir()
+        if parentid is None:
+            lg.error("Can't find directory %s in drive" % self.args.dst[0])
+            sys.exit("Can't find directory %s in drive" % self.args.dst[0])
 
         ## check src files exists in local
         for src in self.args.src:
@@ -91,34 +94,9 @@ class CommandPush(DriveServiceCommand):
 
     def find_dst_dir(self):
         dstdir = self.args.dst[0]
-        parents = False
-        dirs = self.args.dst[0].split('/')
+        return self.find_parent_id(dstdir)
 
-        parentid = 'root'
-        for aidx in range(len(dirs)):
-            lg.debug("dirs[%d] %s" % (aidx, dirs[aidx]))
-            if aidx == 0 and dirs[0] == '':
-                continue
-            children_dirs = self.check_children_dirs(dirs[aidx], parentid)
-            dirs_nums = len(children_dirs)
-            if dirs_nums == 0:
-                lg.debug("Can't find directory %s" % (dirs[aidx]))
-            elif dirs_nums > 1:
-                lg.warn("Find %d instances of directory %s" % (
-                    dirs_nums, dirs[aidx]))
-            parentid = children_dirs[0]['id']
-        return parentid
-
-    def check_children_dirs(self, dirname, parent="root"):
-        query = "mimeType = 'application/vnd.google-apps.folder'"
-        query += " and title = '%s'" % dirname
-        query += " and '%s' in parents" % parent
-        lg.debug("query %s" % query)
-        children_dirs = self.file_list(query)
-        #for adir in children_dirs:
-        #    lg.debug("children %s id %s" % (adir['title'], adir['id']))
-        return children_dirs
-
+## not used
     def get_children_dirs(self, parent="root"):
         query += " and '%s' in parents" % parent
         #return self.children_list(parent, query)

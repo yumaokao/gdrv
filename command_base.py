@@ -1,10 +1,19 @@
 #!/usr/bin/python
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 import os
+import logging
 import httplib2
 import global_mod as gm
 from apiclient.discovery import build
 from oauth2client.file import Storage
+
+lg = logging.getLogger("BASE")
+lg.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('[%(name)s] %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+lg.addHandler(ch)
 
 
 class DriveCommand():
@@ -54,6 +63,36 @@ class DriveServiceCommand(DriveCommand):
 
     def do_service_command(self):
         pass
+
+## helper drive apis ##
+    def find_parent_id(self, pdir, pmkdir=False):
+        dirs = pdir.split('/')
+        parentid = 'root'
+        #for aidx in range(len(dirs)):
+        for adir in dirs:
+            lg.debug("dirs %s" % (adir))
+            if adir == '':
+                continue
+            children_dirs = self.check_children_dirs(adir, parentid)
+            dirs_nums = len(children_dirs)
+            if dirs_nums == 0:
+                lg.error("Can't find directory %s" % (adir))
+                return None
+            elif dirs_nums > 1:
+                lg.warn("Find %d instances of directory %s" % (
+                    dirs_nums, adir))
+            parentid = children_dirs[0]['id']
+        return parentid
+
+    def check_children_dirs(self, dirname, parent="root"):
+        query = "mimeType = 'application/vnd.google-apps.folder'"
+        query += " and title = '%s'" % dirname
+        query += " and '%s' in parents" % parent
+        lg.debug("query %s" % query)
+        children_dirs = self.file_list(query)
+        #for adir in children_dirs:
+        #    lg.debug("children %s id %s" % (adir['title'], adir['id']))
+        return children_dirs
 
 ## basic drive apis ##
     def file_list(self, query=""):
