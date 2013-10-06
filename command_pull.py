@@ -103,12 +103,13 @@ class CommandPull(DriveServiceCommand):
         drive_size = int(pfile['fileSize'])
         #lg.debug("size http %d drive %d" % (http_size, drive_size))
 
+        print "%s downloading ..." % pfile['title']
+        tmpfile = "%s.part" % pfile['title']
         size = http_size
         chunk_size = 1024 * 1024
-        with open(pfile['title'], 'w') as fout:
+        with open(tmpfile, 'w') as fout:
             pbar = progressbar.ProgressBar(
-                widgets=[pfile['title'],
-                         progressbar.Percentage(),
+                widgets=[progressbar.Percentage(),
                          progressbar.Bar()],
                 maxval=size).start()
             pull_size = 0
@@ -125,11 +126,8 @@ class CommandPull(DriveServiceCommand):
             lg.warn("only %d of %d bytes downloaded, maybe incompleted" %
                     (pull_size, http_size))
         else:
-            print "%s download completed" % pfile['title']
-        #lg.debug(pfile)
-        #lg.debug(res.info())
-        #lg.debug(res.read(100))
-        #lg.debug("title %s http size %d" % (pfile['title'], size))
+            os.rename(tmpfile, pfile['title'])
+            #print "%s download completed" % pfile['title']
 
     def get_all_children_files(self, psrcdir, pflat=False):
         ## TODO recursive
