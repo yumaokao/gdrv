@@ -6,6 +6,7 @@ import sys
 import argparse
 import re
 import logging
+import colorama
 import ConfigParser
 
 import global_mod as gm
@@ -47,7 +48,7 @@ def get_config(args=None):
     last_cfg_name = ""
     for cfg_path in gm.config_paths:
         cfg_name = os.path.expanduser(cfg_path + '.' + gm.app_name + 'rc')
-        lg.debug("YMK config file check %s", cfg_name)
+        #lg.debug("YMK config file check %s", cfg_name)
         if os.path.exists(cfg_name):
             last_cfg_name = cfg_name
             gm.config.read(cfg_name)
@@ -63,8 +64,6 @@ def get_config(args=None):
 
 def main():
     global drive_commands
-
-    lg.debug("YMK Goodbye World!!!")
 
     parser = argparse.ArgumentParser(
         description='YMK google drive command line tool')
@@ -82,7 +81,9 @@ def main():
 
     get_config(args)
 
+    colorama.init()
     drive_commands[args.command_name].do_command(args)
+    colorama.deinit()
 
 
 if __name__ == '__main__':

@@ -70,7 +70,7 @@ class DriveServiceCommand(DriveCommand):
         parentid = 'root'
         #for aidx in range(len(dirs)):
         for adir in dirs:
-            lg.debug("dirs %s" % (adir))
+            #lg.debug("dirs %s" % (adir))
             if adir == '':
                 continue
             children_dirs = self.check_children_dirs(adir, parentid)
@@ -88,7 +88,7 @@ class DriveServiceCommand(DriveCommand):
         query = "mimeType = 'application/vnd.google-apps.folder'"
         query += " and title = '%s'" % dirname
         query += " and '%s' in parents" % parent
-        lg.debug("query %s" % query)
+        #lg.debug("query %s" % query)
         children_dirs = self.file_list(query)
         #for adir in children_dirs:
         #    lg.debug("children %s id %s" % (adir['title'], adir['id']))
@@ -103,7 +103,7 @@ class DriveServiceCommand(DriveCommand):
         Returns:
           List of File resources.
         """
-        lg.debug("file_list query %s" % query)
+        #lg.debug("file_list query %s" % query)
         result = []
         page_token = None
         while True:
