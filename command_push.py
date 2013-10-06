@@ -98,11 +98,10 @@ class CommandPush(DriveServiceCommand):
 
 ## not used
     def get_children_dirs(self, parent="root"):
+        query = "mimeType = 'application/vnd.google-apps.folder'"
         query += " and '%s' in parents" % parent
         #return self.children_list(parent, query)
         return self.file_list(query)
-
-        query = "mimeType = 'application/vnd.google-apps.folder'"
 
     def get_all_dirs(self):
         query = "mimeType = 'application/vnd.google-apps.folder'"

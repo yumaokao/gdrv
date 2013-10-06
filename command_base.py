@@ -103,6 +103,7 @@ class DriveServiceCommand(DriveCommand):
         Returns:
           List of File resources.
         """
+        lg.debug("file_list query %s" % query)
         result = []
         page_token = None
         while True:
