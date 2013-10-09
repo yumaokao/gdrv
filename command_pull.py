@@ -49,19 +49,28 @@ class CommandPull(DriveServiceCommand):
 
         if len(pulls) == 0:
             sys.exit("No files matched in drive")
-        print(colorama.Fore.RED +
-              "Would you like to pull these files ?" +
-              colorama.Style.RESET_ALL)
+        self.info(colorama.Fore.RED +
+                  "Would you like to pull these files ?" +
+                  colorama.Style.RESET_ALL)
         for pidx in range(len(pulls)):
             ## TODO colorama
-            print "%d %s" % (pidx, pulls[pidx]['title'])
-        inpstr = raw_input("[a]= all, [0-%d]: number: " %
-                           (len(pulls) - 1)).strip()
+            self.info("%d %s" % (pidx, pulls[pidx]['title']))
+        self.info("[a]= all, [0-%d]: number: " % (len(pulls) - 1))
+        #inpstr = raw_input("[a]= all, [0-%d]: number: " %
+        #                   (len(pulls) - 1)).strip()
+        inpstr = raw_input().strip()
         allidxs = self.parse_input_string(inpstr, len(pulls))
         for pidx in allidxs:
             self.pull_a_file(pulls[pidx])
 
 ## private methods ##
+    def info(self, *args):
+        try:
+            sys.stderr.write(*args)
+            sys.stderr.write('\n')
+        except UnicodeError:
+            pass
+
     def parse_input_string(self, pinstr, pmaxlen):
         idxs = []
         if pinstr == 'a':
@@ -103,7 +112,7 @@ class CommandPull(DriveServiceCommand):
         drive_size = int(pfile['fileSize'])
         #lg.debug("size http %d drive %d" % (http_size, drive_size))
 
-        print "%s downloading ..." % pfile['title']
+        self.info("%s downloading ..." % pfile['title'])
         tmpfile = "%s.part" % pfile['title']
         size = http_size
         chunk_size = 1024 * 1024
