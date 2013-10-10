@@ -30,7 +30,7 @@ class CommandPull(DriveServiceCommand):
         ### for query string composing ###
         self.cmdparser.add_argument('src', nargs='+',
                                     help='source files')
-        self.cmdparser.add_argument('-O', '--output', nargs=1,
+        self.cmdparser.add_argument('-o', '--output', nargs=1,
                                     help='desination')
 
     def do_service_command(self):
@@ -60,8 +60,14 @@ class CommandPull(DriveServiceCommand):
         #                   (len(pulls) - 1)).strip()
         inpstr = raw_input().strip()
         allidxs = self.parse_input_string(inpstr, len(pulls))
-        for pidx in allidxs:
-            self.pull_a_file(pulls[pidx])
+        if not self.args.output is None:
+            if not len(allidxs) == 1:
+                lg.error("Mutilple output filenames not yet supported")
+            else:
+                self.pull_a_file(pulls[0], self.args.output[0])
+        else:
+            for pidx in allidxs:
+                self.pull_a_file(pulls[pidx])
 
 ## private methods ##
     def info(self, *args):
@@ -94,7 +100,7 @@ class CommandPull(DriveServiceCommand):
         #lg.debug(ridx)
         return set(filter(lambda x: x < pmaxlen, idxs))
 
-    def pull_a_file(self, pfile):
+    def pull_a_file(self, pfile, pname=None):
         #lg.debug("title %s url %s" % (pfile['title'], pfile['downloadUrl']))
         try:
             auth = {}
@@ -113,10 +119,19 @@ class CommandPull(DriveServiceCommand):
         #lg.debug("size http %d drive %d" % (http_size, drive_size))
 
         self.info("%s downloading ..." % pfile['title'])
-        tmpfile = "%s.part" % pfile['title']
+        if pname is None:
+            tmpfile = "%s.part" % pfile['title']
+        else:
+            tmpfile = "%s.part" % pname
         size = http_size
         chunk_size = 1024 * 1024
-        with open(tmpfile, 'w') as fout:
+        #with open(tmpfile, 'w') as fout:
+        try:
+            #lg.debug("[%s]" % pname)
+            if not pname is None and pname == '-':
+                fout = sys.stdout
+            else:
+                fout = open(tmpfile, 'w')
             pbar = progressbar.ProgressBar(
                 widgets=[progressbar.Percentage(),
                          progressbar.Bar()],
@@ -130,6 +145,14 @@ class CommandPull(DriveServiceCommand):
                 fout.write(buf)
                 buf = res.read(chunk_size)
             pbar.finish()
+        except IOError, e:
+            if fout == sys.stdout:
+                pass
+            else:
+                lg.error("IOError, %s" % e)
+        finally:
+            if not fout == sys.stdout:
+                fout.close()
 
         if pull_size != http_size:
             lg.warn("only %d of %d bytes downloaded, maybe incompleted" %
