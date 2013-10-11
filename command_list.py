@@ -5,7 +5,7 @@ import global_mod as gm
 from apiclient import errors
 from command_base import DriveServiceCommand
 
-lg = logging.getLogger("LIST")
+lg = logging.getLogger("DRIVE.LIST")
 #lg.setLevel(logging.INFO)
 
 

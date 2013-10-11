@@ -11,7 +11,7 @@ import global_mod as gm
 from apiclient import errors
 from command_base import DriveServiceCommand
 
-lg = logging.getLogger("PULL")
+lg = logging.getLogger("DRIVE.PULL")
 #lg.setLevel(logging.INFO)
 
 

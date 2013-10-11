@@ -8,7 +8,7 @@ from apiclient import errors
 from apiclient.http import MediaFileUpload
 from command_base import DriveServiceCommand
 
-lg = logging.getLogger("PUSH")
+lg = logging.getLogger("DRIVE.PUSH")
 #lg.setLevel(logging.INFO)
 
 
