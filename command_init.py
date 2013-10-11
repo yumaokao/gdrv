@@ -14,14 +14,8 @@ from oauth2client.client import AccessTokenRefreshError
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.tools import run
 
-lg = logging.getLogger("INIT")
-lg.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('[%(name)s] %(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-lg.addHandler(ch)
-logging.getLogger('oauth2client.util').addHandler(ch)
+lg = logging.getLogger("DRIVE.INIT")
+#lg.setLevel(logging.INFO)
 
 
 class CommandInit(DriveServiceCommand):

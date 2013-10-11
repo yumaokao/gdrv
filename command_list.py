@@ -6,12 +6,7 @@ from apiclient import errors
 from command_base import DriveServiceCommand
 
 lg = logging.getLogger("LIST")
-lg.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('[%(name)s] %(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-lg.addHandler(ch)
+#lg.setLevel(logging.INFO)
 
 
 class CommandList(DriveServiceCommand):

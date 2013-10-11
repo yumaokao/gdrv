@@ -9,12 +9,7 @@ from apiclient.http import MediaFileUpload
 from command_base import DriveServiceCommand
 
 lg = logging.getLogger("PUSH")
-lg.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('[%(name)s] %(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-lg.addHandler(ch)
+#lg.setLevel(logging.INFO)
 
 
 class CommandPush(DriveServiceCommand):

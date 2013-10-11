@@ -15,15 +15,16 @@ from command_init import CommandInit
 from command_push import CommandPush
 from command_pull import CommandPull
 
-
-lg = logging.getLogger("DRIVE_MAIN")
-lg.setLevel(logging.DEBUG)
+lgr = logging.getLogger()
+lgr.setLevel(logging.ERROR)
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 formatter = logging.Formatter('[%(name)s] %(levelname)s - %(message)s')
 ch.setFormatter(formatter)
-lg.addHandler(ch)
+lgr.addHandler(ch)
 
+lg = logging.getLogger("DRIVE")
+lg.setLevel(logging.DEBUG)
 
 drive_commands = {}
 

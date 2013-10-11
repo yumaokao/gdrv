@@ -8,12 +8,7 @@ from apiclient.discovery import build
 from oauth2client.file import Storage
 
 lg = logging.getLogger("BASE")
-lg.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('[%(name)s] %(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-lg.addHandler(ch)
+#lg.setLevel(logging.INFO)
 
 
 class DriveCommand():
