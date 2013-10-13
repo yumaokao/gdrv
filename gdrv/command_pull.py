@@ -22,9 +22,8 @@ class CommandPull(DriveServiceCommand):
         ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('pull',
                                                    help='command list help')
-        ### for query string composing ###
         self.cmdparser.add_argument('src', nargs='+',
-                                    help='source files')
+                                    help='google drive files')
         self.cmdparser.add_argument('-o', '--output', nargs=1,
                                     help='desination')
 

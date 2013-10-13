@@ -14,6 +14,7 @@ from command_list import CommandList
 from command_init import CommandInit
 from command_push import CommandPush
 from command_pull import CommandPull
+from command_search import CommandSearch
 
 lgr = logging.getLogger()
 lgr.setLevel(logging.ERROR)
@@ -92,6 +93,7 @@ def main():
     drive_commands = {'list': CommandList(subparser),
                       'push': CommandPush(subparser),
                       'pull': CommandPull(subparser),
+                      'search': CommandSearch(subparser),
                       'init': CommandInit(subparser)}
 
     args = parser.parse_args()
