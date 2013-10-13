@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 import os
+import sys
 import logging
 import httplib2
 import global_mod as gm
@@ -27,6 +28,13 @@ class DriveCommand():
 
     def do_drive_command(self):
         pass
+
+    def info(self, *args):
+        try:
+            sys.stdout.write(*args)
+            sys.stdout.write('\n')
+        except UnicodeError:
+            pass
 
 
 class DriveServiceCommand(DriveCommand):

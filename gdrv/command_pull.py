@@ -63,7 +63,6 @@ class CommandPull(DriveServiceCommand):
             for pidx in allidxs:
                 self.pull_a_file(pulls[pidx])
 
-## private methods ##
     def info(self, *args):
         try:
             sys.stderr.write(*args)
@@ -71,6 +70,7 @@ class CommandPull(DriveServiceCommand):
         except UnicodeError:
             pass
 
+## private methods ##
     def parse_input_string(self, pinstr, pmaxlen):
         idxs = []
         if pinstr == 'a':

@@ -3,6 +3,7 @@
 import os
 import sys
 import logging
+import progressbar
 import global_mod as gm
 from apiclient import errors
 from apiclient.http import MediaFileUpload
@@ -79,10 +80,21 @@ class CommandPush(DriveServiceCommand):
             body['parents'] = [{'id': parent_id}]
 
         try:
-            file = self.service.files().insert(
+            req = self.service.files().insert(
                 body=body,
-                media_body=media_body).execute()
-            return file
+                media_body=media_body)
+            self.info("%s uploading ..." % title)
+            pbar = progressbar.ProgressBar(
+                widgets=[progressbar.Percentage(),
+                         progressbar.Bar()],
+                maxval=100).start()
+            res = None
+            while res is None:
+                status, res = req.next_chunk()
+                if status:
+                    #lg.debug("%d%% uploaded", int(status.progress() * 100))
+                    pbar.update(int(status.progress() * 100))
+            return res
         except errors.HttpError, error:
             lg.error('An error occured: %s' % error)
             return None

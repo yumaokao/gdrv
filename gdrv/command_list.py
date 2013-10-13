@@ -42,7 +42,7 @@ class CommandList(DriveServiceCommand):
             sys.exit("No files matched in drive")
 
         for pidx in range(len(pulls)):
-            print("%d %s" % (pidx, pulls[pidx]['title']))
+            self.info("%d %s" % (pidx, pulls[pidx]['title']))
 
 ## private methods ##
     def get_all_children(self, psrcdir, pflat=False):
