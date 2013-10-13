@@ -24,9 +24,20 @@ ch.setFormatter(formatter)
 lgr.addHandler(ch)
 
 lg = logging.getLogger("DRIVE")
-lg.setLevel(logging.DEBUG)
+lg.setLevel(logging.ERROR)
 
 drive_commands = {}
+
+
+def set_logging_level(plevel=0):
+    global lg
+    lvls = [logging.CRITICAL,
+            logging.ERROR,
+            logging.WARNING,
+            logging.INFO,
+            logging.DEBUG]
+    #print min(plevel, len(lvls) - 1)
+    lg.setLevel(lvls[min(plevel, len(lvls) - 1)])
 
 
 def load_default_config():
@@ -68,9 +79,11 @@ def main():
 
     parser = argparse.ArgumentParser(
         description='YMK google drive command line tool')
+    parser.add_argument('-v', '--verbose', action='count', default=0,
+                        help='increse verbosity/logging level')
     parser.add_argument('-w', '--write-config', action='store_true',
                         help='write a default config')
-    parser.add_argument('-v', '--version', action='version',
+    parser.add_argument('-V', '--version', action='version',
                         version="%s" % gm.version,
                         help='show version infomation')
     subparser = parser.add_subparsers(help='drive sub command',
@@ -82,6 +95,7 @@ def main():
                       'init': CommandInit(subparser)}
 
     args = parser.parse_args()
+    set_logging_level(args.verbose)
 
     get_config(args)
 
