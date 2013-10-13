@@ -2,9 +2,10 @@
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 
 from setuptools import setup
+from gdrv import global_mod as gm
 
-setup(name='gdrv',
-      version='0.0.2',
+setup(name=gm.app_name,
+      version=gm.version,
       description='Another google drive command line interface program',
       url='https://github.com/yumaokao/gdrv',
       author='yumaokao',

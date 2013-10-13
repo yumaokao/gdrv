@@ -70,6 +70,9 @@ def main():
         description='YMK google drive command line tool')
     parser.add_argument('-w', '--write-config', action='store_true',
                         help='write a default config')
+    parser.add_argument('-v', '--version', action='version',
+                        version="%s" % gm.version,
+                        help='show version infomation')
     subparser = parser.add_subparsers(help='drive sub command',
                                       dest='command_name')
 
