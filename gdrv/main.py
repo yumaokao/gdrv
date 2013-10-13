@@ -37,7 +37,7 @@ def load_default_config():
     gm.config.set('api', 'client_secret', 'ZZI0GSvLNLEHYUNsBsrmkG2y')
     gm.config.set('api', 'redirect_url', 'http://127.0.0.1')
     gm.config.set('api', 'scope', 'https://www.googleapis.com/auth/drive')
-    gm.config.set('api', 'storage', '~/.drivegoogle/credentials.dat')
+    gm.config.set('api', 'storage', '~/.config/gdrv/credentials.dat')
 
 
 def get_config(args=None):

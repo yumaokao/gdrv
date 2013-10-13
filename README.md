@@ -1,7 +1,7 @@
-drive-google
+gdrv
 ============
 
-A command for easy access google drive in Linux written in Python.
+Another google drive command line interface program written in Python.
 
 Author
 ============
