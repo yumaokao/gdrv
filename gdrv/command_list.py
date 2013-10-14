@@ -33,9 +33,10 @@ class CommandList(DriveServiceCommand):
         for asrc in self.args.pat:
             dirname = os.path.dirname(asrc)
             basename = os.path.basename(asrc)
-            ## TODO check basename is None
+            if basename == "":
+                basename = '*'
             lg.debug("src dirname %s basename %s" % (dirname, basename))
-            files = self.find_src_files(dirname, basename)
+            files = self.find_drive_files(dirname, basename)
             pulls.extend(files)
 
         if len(pulls) == 0:
@@ -45,20 +46,3 @@ class CommandList(DriveServiceCommand):
             self.info("%d %s" % (pidx, pulls[pidx]['title']))
 
 ## private methods ##
-    def get_all_children(self, psrcdir, pflat=False):
-        ## TODO recursive
-        parentid = self.find_parent_id(psrcdir)
-        if parentid is None:
-            lg.error("Can't find directory %s in drive" % psrcdir)
-            sys.exit("Can't find directory %s in drive" % psrcdir)
-        query = "'%s' in parents" % parentid
-        query += " and trashed = false"
-        return self.file_list(query)
-
-    def find_src_files(self, psrcdir, pname):
-        matches = []
-        files = self.get_all_children(psrcdir)
-        for afile in files:
-            if fnmatch.fnmatch(afile['title'], pname):
-                matches.append(afile)
-        return matches

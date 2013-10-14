@@ -3,6 +3,7 @@
 import os
 import sys
 import logging
+import fnmatch
 import httplib2
 import global_mod as gm
 from apiclient.discovery import build
@@ -68,6 +69,28 @@ class DriveServiceCommand(DriveCommand):
         pass
 
 ## helper drive apis ##
+    def find_drive_files(self, psrcdir, pname,
+                         hidedir=False, hidetrashed=True):
+        matches = []
+        files = self.get_all_children(psrcdir,
+                                      hidedir=hidedir, hidetrashed=hidetrashed)
+        for afile in files:
+            if fnmatch.fnmatch(afile['title'], pname):
+                matches.append(afile)
+        return matches
+
+    def get_all_children(self, psrcdir, hidedir=False, hidetrashed=True):
+        parentid = self.find_parent_id(psrcdir)
+        if parentid is None:
+            lg.error("Can't find directory %s in drive" % psrcdir)
+            sys.exit("Can't find directory %s in drive" % psrcdir)
+        query = "'%s' in parents" % parentid
+        if hidedir is True:
+            query += " and mimeType != 'application/vnd.google-apps.folder'"
+        if hidetrashed is True:
+            query += " and trashed = false"
+        return self.file_list(query)
+
     def find_parent_id(self, pdir, pmkdir=False):
         dirs = pdir.split('/')
         parentid = 'root'

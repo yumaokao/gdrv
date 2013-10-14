@@ -38,7 +38,7 @@ class CommandPull(DriveServiceCommand):
             basename = os.path.basename(asrc)
             ## TODO check basename is None
             lg.debug("src dirname %s basename %s" % (dirname, basename))
-            files = self.find_src_files(dirname, basename)
+            files = self.find_drive_files(dirname, basename, hidedir=True)
             pulls.extend(files)
 
         if len(pulls) == 0:
@@ -154,22 +154,3 @@ class CommandPull(DriveServiceCommand):
         else:
             os.rename(tmpfile, pfile['title'])
             #print "%s download completed" % pfile['title']
-
-    def get_all_children_files(self, psrcdir, pflat=False):
-        ## TODO recursive
-        parentid = self.find_parent_id(psrcdir)
-        if parentid is None:
-            lg.error("Can't find directory %s in drive" % psrcdir)
-            sys.exit("Can't find directory %s in drive" % psrcdir)
-        query = "'%s' in parents" % parentid
-        query += " and mimeType != 'application/vnd.google-apps.folder'"
-        query += " and trashed = false"
-        return self.file_list(query)
-
-    def find_src_files(self, psrcdir, pname):
-        matches = []
-        files = self.get_all_children_files(psrcdir)
-        for afile in files:
-            if fnmatch.fnmatch(afile['title'], pname):
-                matches.append(afile)
-        return matches
