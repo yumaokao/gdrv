@@ -15,6 +15,7 @@ from command_init import CommandInit
 from command_push import CommandPush
 from command_pull import CommandPull
 from command_search import CommandSearch
+from command_trash import CommandTrash
 
 lgr = logging.getLogger()
 lgr.setLevel(logging.ERROR)
@@ -94,6 +95,7 @@ def main():
                       'push': CommandPush(subparser),
                       'pull': CommandPull(subparser),
                       'search': CommandSearch(subparser),
+                      'trash': CommandTrash(subparser),
                       'init': CommandInit(subparser)}
 
     args = parser.parse_args()

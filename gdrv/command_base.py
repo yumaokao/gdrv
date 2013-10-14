@@ -30,12 +30,36 @@ class DriveCommand():
     def do_drive_command(self):
         pass
 
+## base command methods ##
     def info(self, *args):
         try:
             sys.stdout.write(*args)
             sys.stdout.write('\n')
         except UnicodeError:
             pass
+
+    def parse_input_string(self, pinstr, pmaxlen):
+        idxs = []
+        if pinstr == 'a':
+            return range(pmaxlen)
+        for acom in pinstr.split(','):
+            arange = acom.split('-')
+            #lg.debug("aidx ")
+            #lg.debug(arange)
+            try:
+                if len(arange) == 1:
+                    aidx = int(arange[0])
+                    idxs.append(aidx)
+                elif len(arange) == 2:
+                    aidx = int(arange[0])
+                    bidx = int(arange[1])
+                    idxs.extend(range(aidx, bidx + 1))
+            except ValueError:
+                pass
+            #lg.debug("aidx %d bidx %d") % (aidx, bidx)
+        #ridx = filter(lambda x: x < pmaxlen, idxs)
+        #lg.debug(ridx)
+        return set(filter(lambda x: x < pmaxlen, idxs))
 
 
 class DriveServiceCommand(DriveCommand):
