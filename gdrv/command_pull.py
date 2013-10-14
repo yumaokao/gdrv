@@ -9,19 +9,20 @@ import colorama
 import progressbar
 import global_mod as gm
 from apiclient import errors
-from command_base import DriveServiceCommand
+#from command_base import DriveServiceCommand
+from command_list import CommandList
 
 lg = logging.getLogger("DRIVE.PULL")
 #lg.setLevel(logging.INFO)
 
 
-class CommandPull(DriveServiceCommand):
+class CommandPull(CommandList):
     """ A Drive Command Class """
 
     def init_cmdparser(self):
         ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('pull',
-                                                   help='command list help')
+                                                   help='command pull help')
         self.cmdparser.add_argument('src', nargs='+',
                                     help='google drive files')
         self.cmdparser.add_argument('-o', '--output', nargs=1,
@@ -32,14 +33,7 @@ class CommandPull(DriveServiceCommand):
         """
 
         #lg.debug(self.args)
-        pulls = []
-        for asrc in self.args.src:
-            dirname = os.path.dirname(asrc)
-            basename = os.path.basename(asrc)
-            ## TODO check basename is None
-            lg.debug("src dirname %s basename %s" % (dirname, basename))
-            files = self.find_drive_files(dirname, basename, hidedir=True)
-            pulls.extend(files)
+        pulls = self.get_all_src_files(self.args.src, hidedir=True)
 
         if len(pulls) == 0:
             sys.exit("No files matched in drive")
@@ -47,7 +41,6 @@ class CommandPull(DriveServiceCommand):
                   "Would you like to pull these files ?" +
                   colorama.Style.RESET_ALL)
         for pidx in range(len(pulls)):
-            ## TODO colorama
             self.info("%d %s" % (pidx, pulls[pidx]['title']))
         self.info("[a]= all, [0-%d]: number: " % (len(pulls) - 1))
         #inpstr = raw_input("[a]= all, [0-%d]: number: " %
