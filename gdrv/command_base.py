@@ -6,6 +6,7 @@ import logging
 import fnmatch
 import httplib2
 import global_mod as gm
+from apiclient import errors
 from apiclient.discovery import build
 from oauth2client.file import Storage
 
