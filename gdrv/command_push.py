@@ -19,12 +19,15 @@ class CommandPush(DriveServiceCommand):
     def init_cmdparser(self):
         ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('push',
-                                                   help='command list help')
+                                                   help='command push help')
         ### for query string composing ###
         self.cmdparser.add_argument('src', nargs='+',
                                     help='source files')
         self.cmdparser.add_argument('dst', nargs=1,
                                     help='desination')
+        self.cmdparser.add_argument('-p', '--prarents', nargs=1,
+                                    help='no error if existing,'
+                                         'make parent directories as needed')
 
     def do_service_command(self):
         """push files
@@ -33,6 +36,14 @@ class CommandPush(DriveServiceCommand):
         lg.debug("YMK in do_command")
         lg.debug(self.args)
         #sys.stderr.write("YMK STDERR\n")
+
+        if len(self.args.src) > 1:
+            if os.path.basename(self.args.dst[0]) != "":
+                lg.error("Multiple source should put in a directory")
+                sys.exit("Multiple source should put in a directory")
+        else:
+            title = os.path.basename(self.args.dst[0])
+
         parentid = self.find_dst_dir()
         if parentid is None:
             lg.error("Can't find directory %s in drive" % self.args.dst[0])
@@ -40,15 +51,17 @@ class CommandPush(DriveServiceCommand):
 
         ## check src files exists in local
         for src in self.args.src:
-            if os.path.exists(src):
-                lg.debug("%s exists" % src)
+            if not os.path.exists(src):
+                lg.error("%s dosen't exists" % src)
+                sys.exit("%s dosen't exists" % src)
 
         ## TODO check files exist in drive
         ## TODO to create or update
 
         for src in self.args.src:
-            title = os.path.basename(src)
-            #lg.debug("title %s put in %s" % (title, parentid))
+            if title == "":
+                title = os.path.basename(src)
+            lg.debug("src %s title %s put in %s" % (src, title, parentid))
             afile = self.file_insert(src, title, parentid)
             if afile is None or not afile['title'] == title:
                 lg.error("File %s push error", src)
@@ -100,7 +113,7 @@ class CommandPush(DriveServiceCommand):
             return None
 
     def find_dst_dir(self):
-        dstdir = self.args.dst[0]
+        dstdir = os.path.dirname(self.args.dst[0])
         return self.find_parent_id(dstdir)
 
 ## not used
