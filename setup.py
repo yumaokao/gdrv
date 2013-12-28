@@ -5,7 +5,7 @@ from setuptools import setup
 #from gdrv import global_mod as gm
 
 setup(name='gdrv',
-      version='0.0.8',
+      version='0.0.9',
       description='Another google drive command line interface program',
       url='https://github.com/yumaokao/gdrv',
       author='yumaokao',
