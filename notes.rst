@@ -47,6 +47,9 @@ TODO
 ----
 * [X] 2013-12-28 command mkdir
 * [ ] make list looks good
+* [ ] command url
+* [ ] command share
+* [ ] manual in github README.md
 
 Q&A
 ---
