@@ -28,6 +28,13 @@ PIP
 
   with root
 
+* change pypi password
+  ::
+
+    vim ~/.pypirc
+    [pypi]username:Yu.Mao.Kao
+    password:XXXXXXXX
+
 EXECUTE
 -------
 * execute in place
@@ -43,9 +50,20 @@ EXECUTE
     if __name__ == '__main__':
         gdrv.main.main()
 
+UTF-8
+-----
+* make prinf with utf-8 encoding
+  ::
+
+    # -*- coding: utf-8 -*-
+
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+
 TODO
 ----
 * [X] 2013-12-28 command mkdir
+* [X] 2014-03-02 uft8
 * [ ] make list looks good
 * [ ] command url
 * [ ] command share

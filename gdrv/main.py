@@ -1,6 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
-
 import os
 import sys
 import argparse
@@ -17,6 +17,9 @@ from command_pull import CommandPull
 from command_mkdir import CommandMkdir
 from command_search import CommandSearch
 from command_trash import CommandTrash
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 lgr = logging.getLogger()
 lgr.setLevel(logging.ERROR)
