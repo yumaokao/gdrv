@@ -36,7 +36,12 @@ class CommandList(DriveServiceCommand):
 
         for pidx in range(len(files)):
             #TODO list display
-            self.info("%d %s" % (pidx, files[pidx]['title']))
+            if 'weViewLink' in files[pidx]:
+                self.info("%d %s %s" % (pidx, files[pidx]['title'], files[pidx]['webViewLink']))
+            elif 'webContentLink' in files[pidx]:
+                self.info("%d %s %s" % (pidx, files[pidx]['title'], files[pidx]['webContentLink']))
+            else:
+                self.info("%d %s %s" % (pidx, files[pidx]['title'], files[pidx]['id']))
 
 ## private methods ##
     def get_all_src_files(self, psrc, hidedir=False):

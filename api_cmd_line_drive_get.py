@@ -22,7 +22,7 @@ scope = 'https://www.googleapis.com/auth/drive'
 flow = OAuth2WebServerFlow(client_id, client_secret, scope, "http://127.0.0.1")
 
 
-def retrieve_me_files(service, query =""):
+def retrieve_me_files(service, query=""):
     """Retrieve a list of File resources.
 
     Args:
@@ -96,12 +96,12 @@ def main():
         print "%s, %s, %s, %s" % (fl['title'], fl['id'], fl['fileSize'], fl['mimeType'])
         dlurl = fl['downloadUrl']
         if dlurl:
-            resp, content = service._http.request(dlurl);
+            resp, content = service._http.request(dlurl)
             print "Status: %s" % resp
             if resp.status == 200:
                 f = open(fl['title'], 'w')
                 f.write(content)
-        
+
 
 if __name__ == '__main__':
     main()
