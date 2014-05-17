@@ -175,6 +175,34 @@ class DriveServiceCommand(DriveCommand):
                 break
         return result
 
+    def permission_list(self, pfile="root"):
+        """Retrieve a list of permissions of the file
+
+        Args:
+          pfile: drive file id
+        Returns:
+          list of file permissions
+        """
+        #lg.debug("permission_list query %s" % query)
+        result = []
+        page_token = None
+        while True:
+            try:
+                param = {}
+                if page_token:
+                    param['pageToken'] = page_token
+                perms = self.service.permissions().list(fileId=pfile).execute()
+
+                result.extend(perms['items'])
+                page_token = perms.get('nextPageToken')
+                if not page_token:
+                    break
+            except errors.HttpError, error:
+                print 'An error occurred: %s' % error
+                break
+        return result
+
+    # deprecated
     def children_list(self, parent="root", query=""):
         """Retrieve a list of File resources.
 

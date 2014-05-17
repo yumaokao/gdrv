@@ -1,0 +1,52 @@
+#!/usr/bin/python
+# vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
+import os
+import sys
+import fnmatch
+import logging
+import global_mod as gm
+from apiclient import errors
+from command_base import DriveServiceCommand
+from command_list import CommandList
+
+lg = logging.getLogger("DRIVE.URL")
+#lg.setLevel(logging.INFO)
+
+
+class CommandUrl(CommandList):
+    """ A Drive Command Class """
+
+    def init_cmdparser(self):
+        ## python2.7 lack of aliases of add_parser in sub command.
+        self.cmdparser = self.subparser.add_parser('url',
+                                                   help='command list help')
+        self.cmdparser.add_argument('src', nargs='+',
+                                    help='patterns to list in google drive')
+
+    def do_service_command(self):
+        """url files
+        """
+
+        lg.debug("YMK in do_command")
+        lg.debug(self.args)
+
+        files = self.get_all_src_files(self.args.src, False)
+
+        if len(files) == 0:
+            sys.exit("No files matched in drive")
+
+        for pidx in range(len(files)):
+            #TODO list display
+            if 'alternateLink' in files[pidx]:
+                self.info("%d %s atl %s" % (pidx, files[pidx]['title'], files[pidx]['alternateLink']))
+            elif 'webContentLink' in files[pidx]:
+                self.info("%d %s wcl %s" % (pidx, files[pidx]['title'], files[pidx]['webContentLink']))
+            else:
+                self.info("%d %s id %s" % (pidx, files[pidx]['title'], files[pidx]['id']))
+
+            perms = self.permission_list(files[pidx]['id'])
+            lg.debug("len of perms %d" % (len(perms)))
+            for aperm in perms:
+                lg.debug("a perm kind %s type %s role %s" % (aperm['kind'], aperm['type'], aperm['role']))
+
+## private methods ##

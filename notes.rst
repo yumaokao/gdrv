@@ -4,7 +4,7 @@ gdrv NOTES
 PIP
 ---
 * quick package and upload
-  ::
+  code:: python
 
     $ python setup.py sdist
     $ python setup.py sdist upload
@@ -13,12 +13,12 @@ PIP
   from start could reference hitchhiker_
 
 * check with pep8
-  ::
+  code:: sh
 
     $ pep8 gdrv/*.py
 
 * update all pip packages
-  ::
+  code:: python
 
     import pip
     from subprocess import call
@@ -29,7 +29,7 @@ PIP
   with root
 
 * change pypi password
-  ::
+  code:: sh
 
     vim ~/.pypirc
     [pypi]username:Yu.Mao.Kao
@@ -38,13 +38,13 @@ PIP
 EXECUTE
 -------
 * execute in place
-  ::
+  code:: sh
 
     $ cd gdrv
     $ python -m gdrv
 
 * because we have __main__.py in gdrv.
-  ::
+  code:: python
 
     import gdrv
     if __name__ == '__main__':
@@ -53,7 +53,7 @@ EXECUTE
 UTF-8
 -----
 * make prinf with utf-8 encoding
-  ::
+  code:: python
 
     # -*- coding: utf-8 -*-
 
