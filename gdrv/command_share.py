@@ -19,7 +19,7 @@ class CommandShare(CommandList):
     def init_cmdparser(self):
         ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('share',
-                                                   help='command list help')
+                                                   help='command share help')
         self.cmdparser.add_argument('src', nargs='+',
                                     help='patterns to list in google drive')
 
@@ -38,26 +38,58 @@ class CommandShare(CommandList):
         if len(files) == 0:
             sys.exit("No files matched in drive")
 
+        sfiles = []
         for pidx in range(len(files)):
             perms = self.permission_list(files[pidx]['id'])
             perms = filter(lambda p: p['type'] == 'anyone', perms)
             shared = 'shared' if len(perms) > 0 else ''
-            #lg.debug("shared ? %s" % shared)
-            #for aperm in perms:
-            #    lg.debug("a perm kind %s type %s role %s" % (aperm['kind'], aperm['type'], aperm['role']))
 
-            #TODO list display
-            if 'webContentLink' in files[pidx] and not self.args.altlink:
+            if 'webContentLink' in files[pidx]:
                 link = files[pidx]['webContentLink']
-                #self.info("%d %s wcl %s" % (pidx, files[pidx]['title'], files[pidx]['webContentLink']))
             elif 'alternateLink' in files[pidx]:
                 link = files[pidx]['alternateLink']
-                #self.info("%d %s atl %s" % (pidx, files[pidx]['title'], files[pidx]['alternateLink']))
             else:
                 link = files[pidx]['id']
-                #self.info("%d %s id %s" % (pidx, files[pidx]['title'], files[pidx]['id']))
 
-            self.info("%2d %s \n  %s  %s" % (pidx, files[pidx]['title'], shared, link))
+            sfiles.append({'idx': pidx, 'title': files[pidx]['title'], 'id': files[pidx]['id'],
+                           'shared': shared, 'link': link})
+            self.info("%2d %s \n  (%s)  %s" % (pidx, files[pidx]['title'], shared, link))
 
+        self.info("[a]= all, [0-%d]: number: " % (len(files) - 1))
+        inpstr = raw_input().strip()
+        allidxs = self.parse_input_string(inpstr, len(files))
+        for aidx in allidxs:
+            if self.args.unshare is True:
+                if sfiles[aidx]['shared'] == 'shared':
+                    self.info("unsharing %s" % sfiles[aidx]['title'])
+                    self.unshare_a_file(sfiles[aidx]['id'])
+            else:
+                if sfiles[aidx]['shared'] == '':
+                    self.info("sharing %s" % sfiles[aidx]['title'])
+                    self.share_a_file(sfiles[aidx]['id'])
 
 ## private methods ##
+    def share_a_file(self, pfid, pvalue=None, ptype='anyone', prole='reader'):
+        nperm = {
+            'value': pvalue,
+            'type': ptype,
+            'role': prole
+        }
+        try:
+            return self.service.permissions().insert(fileId=pfid, body=nperm).execute()
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
+        self.info("%s shared" % (pfid))
+
+    def unshare_a_file(self, pfid, pvalue=None, ptype='anyone', prole='reader'):
+        perms = self.permission_list(pfid)
+        perms = filter(lambda p: p['type'] == 'anyone', perms)
+        for aperm in perms:
+            try:
+                self.service.permissions().delete(
+                    fileId=pfid, permissionId=aperm['id']).execute()
+            except errors.HttpError, error:
+                print 'An error occurred: %s' % error
+                return None
+        self.info("fid %s unshared" % (pfid))

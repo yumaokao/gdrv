@@ -19,7 +19,7 @@ class CommandUrl(CommandList):
     def init_cmdparser(self):
         ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('url',
-                                                   help='command list help')
+                                                   help='command url help')
         self.cmdparser.add_argument('src', nargs='+',
                                     help='patterns to list in google drive')
 
@@ -57,7 +57,7 @@ class CommandUrl(CommandList):
                 link = files[pidx]['id']
                 #self.info("%d %s id %s" % (pidx, files[pidx]['title'], files[pidx]['id']))
 
-            self.info("%2d %s \n  %s  %s" % (pidx, files[pidx]['title'], shared, link))
+            self.info("%2d %s \n  (%s)  %s" % (pidx, files[pidx]['title'], shared, link))
 
 
 ## private methods ##
