@@ -11,13 +11,14 @@ import ConfigParser
 
 import global_mod as gm
 from command_list import CommandList
-from command_url import CommandUrl
+#from command_url import CommandUrl
 from command_init import CommandInit
 from command_push import CommandPush
 from command_pull import CommandPull
 from command_mkdir import CommandMkdir
 from command_search import CommandSearch
 from command_trash import CommandTrash
+from gdrv import command_share, command_url
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -97,12 +98,13 @@ def main():
                                       dest='command_name')
 
     drive_commands = {'list': CommandList(subparser),
-                      'url': CommandUrl(subparser),
                       'push': CommandPush(subparser),
                       'pull': CommandPull(subparser),
                       'mkdir': CommandMkdir(subparser),
                       'search': CommandSearch(subparser),
                       'trash': CommandTrash(subparser),
+                      'url': command_url.CommandUrl(subparser),
+                      'share': command_share.CommandShare(subparser),
                       'init': CommandInit(subparser)}
 
     args = parser.parse_args()
