@@ -87,7 +87,7 @@ class CommandPush(DriveServiceCommand):
         #'mimeType': mime_type
         body = {
             'title': title
-            }
+        }
         # Set the parent folder.
         if parent_id:
             body['parents'] = [{'id': parent_id}]

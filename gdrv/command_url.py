@@ -23,6 +23,9 @@ class CommandUrl(CommandList):
         self.cmdparser.add_argument('src', nargs='+',
                                     help='patterns to list in google drive')
 
+        self.cmdparser.add_argument('-a', '--altlink', action='store_true',
+                                    help='show alternateLink to redirect google drive file information page')
+
     def do_service_command(self):
         """url files
         """
@@ -36,17 +39,25 @@ class CommandUrl(CommandList):
             sys.exit("No files matched in drive")
 
         for pidx in range(len(files)):
-            #TODO list display
-            if 'alternateLink' in files[pidx]:
-                self.info("%d %s atl %s" % (pidx, files[pidx]['title'], files[pidx]['alternateLink']))
-            elif 'webContentLink' in files[pidx]:
-                self.info("%d %s wcl %s" % (pidx, files[pidx]['title'], files[pidx]['webContentLink']))
-            else:
-                self.info("%d %s id %s" % (pidx, files[pidx]['title'], files[pidx]['id']))
-
             perms = self.permission_list(files[pidx]['id'])
-            lg.debug("len of perms %d" % (len(perms)))
-            for aperm in perms:
-                lg.debug("a perm kind %s type %s role %s" % (aperm['kind'], aperm['type'], aperm['role']))
+            perms = filter(lambda p: p['type'] == 'anyone', perms)
+            shared = 'shared' if len(perms) > 0 else ''
+            #lg.debug("shared ? %s" % shared)
+            #for aperm in perms:
+            #    lg.debug("a perm kind %s type %s role %s" % (aperm['kind'], aperm['type'], aperm['role']))
+
+            #TODO list display
+            if 'webContentLink' in files[pidx] and not self.args.altlink:
+                link = files[pidx]['webContentLink']
+                #self.info("%d %s wcl %s" % (pidx, files[pidx]['title'], files[pidx]['webContentLink']))
+            elif 'alternateLink' in files[pidx]:
+                link = files[pidx]['alternateLink']
+                #self.info("%d %s atl %s" % (pidx, files[pidx]['title'], files[pidx]['alternateLink']))
+            else:
+                link = files[pidx]['id']
+                #self.info("%d %s id %s" % (pidx, files[pidx]['title'], files[pidx]['id']))
+
+            self.info("%2d %s \n  %s  %s" % (pidx, files[pidx]['title'], shared, link))
+
 
 ## private methods ##
