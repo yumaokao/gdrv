@@ -5,6 +5,7 @@ import sys
 import fnmatch
 import logging
 import global_mod as gm
+from colorama import Fore, Style
 from apiclient import errors
 from command_base import DriveServiceCommand
 
@@ -34,14 +35,14 @@ class CommandList(DriveServiceCommand):
         if len(files) == 0:
             sys.exit("No files matched in drive")
 
-        for pidx in range(len(files)):
-            #TODO list display
-            if 'weViewLink' in files[pidx]:
-                self.info("%d %s %s" % (pidx, files[pidx]['title'], files[pidx]['webViewLink']))
-            elif 'webContentLink' in files[pidx]:
-                self.info("%d %s %s" % (pidx, files[pidx]['title'], files[pidx]['webContentLink']))
-            else:
-                self.info("%d %s %s" % (pidx, files[pidx]['title'], files[pidx]['id']))
+        self.show_files_info(files)
+        #for pidx in range(len(files)):
+        #    if 'weViewLink' in files[pidx]:
+        #        self.info("%d %s %s" % (pidx, files[pidx]['title'], files[pidx]['webViewLink']))
+        #    elif 'webContentLink' in files[pidx]:
+        #        self.info("%d %s %s" % (pidx, files[pidx]['title'], files[pidx]['webContentLink']))
+        #    else:
+        #        self.info("%d %s %s %s" % (pidx, files[pidx]['title'], files[pidx]['id'], files[pidx]['ownerNames'][0]))
 
 ## private methods ##
     def get_all_src_files(self, psrc, hidedir=False):
@@ -55,3 +56,25 @@ class CommandList(DriveServiceCommand):
             files = self.find_drive_files(dirname, basename, hidedir=hidedir)
             allfiles.extend(files)
         return allfiles
+
+    def show_files_info(self, pfiles, pnum=False, plong=False):
+        #if pnum is False:
+        #    if plong is False:
+        #        for apf in pfiles:
+        #            self.info()
+
+        if plong is False:
+            for pidx in range(len(pfiles)):
+                apf = pfiles[pidx]
+                self.info_append(Fore.GREEN +
+                                 "%s" % ("%2d " % pidx if pnum is True else "") +
+                                 Style.RESET_ALL)
+                self.info("%s" % (Fore.BLUE + apf['title'] + Style.RESET_ALL
+                                  if apf['mimeType'] == 'application/vnd.google-apps.folder'
+                                  else apf['title']))
+
+    def choose_files(self, pfiles):
+        self.info(Fore.GREEN +
+                  "[a]= all, [0-%d]: number: " % (len(pfiles) - 1) +
+                  Style.RESET_ALL)
+        return raw_input().strip()

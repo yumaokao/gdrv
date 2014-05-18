@@ -40,12 +40,8 @@ class CommandPull(CommandList):
         self.info(colorama.Fore.RED +
                   "Would you like to pull these files ?" +
                   colorama.Style.RESET_ALL)
-        for pidx in range(len(pulls)):
-            self.info("%d %s" % (pidx, pulls[pidx]['title']))
-        self.info("[a]= all, [0-%d]: number: " % (len(pulls) - 1))
-        #inpstr = raw_input("[a]= all, [0-%d]: number: " %
-        #                   (len(pulls) - 1)).strip()
-        inpstr = raw_input().strip()
+        self.show_files_info(pulls, pnum=True)
+        inpstr = self.choose_files(pulls)
         allidxs = self.parse_input_string(inpstr, len(pulls))
         if not self.args.output is None:
             if not len(allidxs) == 1:

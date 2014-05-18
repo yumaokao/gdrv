@@ -10,15 +10,9 @@ import colorama
 import ConfigParser
 
 import global_mod as gm
-from command_list import CommandList
-#from command_url import CommandUrl
-from command_init import CommandInit
-from command_push import CommandPush
-from command_pull import CommandPull
-from command_mkdir import CommandMkdir
-from command_search import CommandSearch
-from command_trash import CommandTrash
-from gdrv import command_share, command_url
+from gdrv import command_init, command_list, command_share, command_url
+from gdrv import command_push, command_pull, command_mkdir
+from gdrv import command_search, command_trash
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -97,15 +91,15 @@ def main():
     subparser = parser.add_subparsers(help='drive sub command',
                                       dest='command_name')
 
-    drive_commands = {'list': CommandList(subparser),
-                      'push': CommandPush(subparser),
-                      'pull': CommandPull(subparser),
-                      'mkdir': CommandMkdir(subparser),
-                      'search': CommandSearch(subparser),
-                      'trash': CommandTrash(subparser),
+    drive_commands = {'list': command_list.CommandList(subparser),
+                      'push': command_push.CommandPush(subparser),
+                      'pull': command_pull.CommandPull(subparser),
+                      'mkdir': command_mkdir.CommandMkdir(subparser),
+                      'search': command_search.CommandSearch(subparser),
+                      'trash': command_trash.CommandTrash(subparser),
                       'url': command_url.CommandUrl(subparser),
                       'share': command_share.CommandShare(subparser),
-                      'init': CommandInit(subparser)}
+                      'init': command_init.CommandInit(subparser)}
 
     args = parser.parse_args()
     set_logging_level(args.verbose)

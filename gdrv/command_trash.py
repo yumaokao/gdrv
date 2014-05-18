@@ -37,10 +37,8 @@ class CommandTrash(CommandList):
         self.info(colorama.Fore.RED +
                   "Would you like to trash these files ?" +
                   colorama.Style.RESET_ALL)
-        for pidx in range(len(pulls)):
-            self.info("%d %s" % (pidx, pulls[pidx]['title']))
-        self.info("[a]= all, [0-%d]: number: " % (len(pulls) - 1))
-        inpstr = raw_input().strip()
+        self.show_files_info(pulls, pnum=True)
+        inpstr = self.choose_files(pulls)
         allidxs = self.parse_input_string(inpstr, len(pulls))
         for pidx in allidxs:
             self.trash_a_file(pulls[pidx])

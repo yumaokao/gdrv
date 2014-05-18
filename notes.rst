@@ -62,12 +62,14 @@ UTF-8
 
 TODO
 ----
-* [X] 2013-12-28 command mkdir
-* [X] 2014-03-02 uft8
-* [ ] make list looks good
-* [ ] command url
-* [ ] command share
-* [ ] manual in github README.md
+* [$] 2013-12-28 ~ 2014-05-18 command mkdir
+* [$] 2014-03-02 ~ 2014-05-18 uft8
+* [$] 2014-05-18 ~ 2014-05-18 command url
+* [$] 2014-05-18 ~ 2014-05-18 command share
+* [$] 2014-05-18 ~ 2014-05-18 refine import in gdrv/main.py
+* [%] 2014-05-18 make list looks good
+* [%] 2014-05-18 make url looks good
+* [ ] 2014-05-18 manual in github README.md
 
 Q&A
 ---

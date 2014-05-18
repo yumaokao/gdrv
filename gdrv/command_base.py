@@ -36,6 +36,15 @@ class DriveCommand():
         try:
             sys.stdout.write(*args)
             sys.stdout.write('\n')
+            sys.stdout.flush()
+        except UnicodeError:
+            pass
+
+    def info_append(self, *args):
+        try:
+            sys.stdout.write(*args)
+            sys.stdout.flush()
+            #sys.stdout.write('\n')
         except UnicodeError:
             pass
 

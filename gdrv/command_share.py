@@ -55,9 +55,8 @@ class CommandShare(CommandList):
                            'shared': shared, 'link': link})
             self.info("%2d %s \n  (%s)  %s" % (pidx, files[pidx]['title'], shared, link))
 
-        self.info("[a]= all, [0-%d]: number: " % (len(files) - 1))
-        inpstr = raw_input().strip()
-        allidxs = self.parse_input_string(inpstr, len(files))
+        inpstr = self.choose_files(sfiles)
+        allidxs = self.parse_input_string(inpstr, len(sfiles))
         for aidx in allidxs:
             if self.args.unshare is True:
                 if sfiles[aidx]['shared'] == 'shared':
