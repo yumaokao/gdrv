@@ -74,8 +74,12 @@ class CommandPull(CommandList):
         except urllib2.HTTPError, e:
             lg.debug(e)
             sys.exit("%s: %s" % (pfile['title'], e))
-        http_size = int(res.info().getheader('Content-Length').strip())
-        drive_size = int(pfile['fileSize'])
+
+        if res.info().getheader('Content-Length') is not None:
+            http_size = int(res.info().getheader('Content-Length').strip())
+        else:
+            http_size = int(pfile['fileSize'])
+        #drive_size = int(pfile['fileSize'])
         #lg.debug("size http %d drive %d" % (http_size, drive_size))
 
         self.info("%s downloading ..." % pfile['title'])
