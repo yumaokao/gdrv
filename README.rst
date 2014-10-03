@@ -6,8 +6,15 @@ Author
 ============
 Yu Mao Kao (yumaokao)
 
+Version
+=======
+0.1.4
+
+Usage
+=====
+
 Quick Start
-===========
+-----------
 * Install with pip/pip2
   code:: sh
 
