@@ -32,6 +32,11 @@ class CommandPull(CommandList):
         """pull files
         """
 
+        self.msgout = sys.stdout
+        if self.args.output is not None:
+            if self.args.output[0] == '-':
+                self.msgout = sys.stderr
+
         #lg.debug(self.args)
         pulls = self.get_all_src_files(self.args.src, hidedir=True)
 
@@ -47,17 +52,11 @@ class CommandPull(CommandList):
             if not len(allidxs) == 1:
                 lg.error("Mutilple output filenames not yet supported")
             else:
-                self.pull_a_file(pulls[0], self.args.output[0])
+                for pidx in allidxs:
+                    self.pull_a_file(pulls[pidx], self.args.output[0])
         else:
             for pidx in allidxs:
                 self.pull_a_file(pulls[pidx])
-
-    def info(self, *args):
-        try:
-            sys.stderr.write(*args)
-            sys.stderr.write('\n')
-        except UnicodeError:
-            pass
 
 ## private methods ##
     def pull_a_file(self, pfile, pname=None):
@@ -122,5 +121,6 @@ class CommandPull(CommandList):
             lg.warn("only %d of %d bytes downloaded, maybe incompleted" %
                     (pull_size, http_size))
         else:
-            os.rename(tmpfile, pfile['title'])
+            if fout != sys.stdout:
+                os.rename(tmpfile, pfile['title'])
             #print "%s download completed" % pfile['title']

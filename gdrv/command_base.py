@@ -19,6 +19,7 @@ class DriveCommand():
 
     def __init__(self, psub_par):
         self.subparser = psub_par
+        self.msgout = sys.stdout
         self.init_cmdparser()
 
     def init_cmdparser(self):
@@ -34,17 +35,17 @@ class DriveCommand():
 ## base command methods ##
     def info(self, *args):
         try:
-            sys.stdout.write(*args)
-            sys.stdout.write('\n')
-            sys.stdout.flush()
+            self.msgout.write(*args)
+            self.msgout.write('\n')
+            self.msgout.flush()
         except UnicodeError:
             pass
 
     def info_append(self, *args):
         try:
-            sys.stdout.write(*args)
-            sys.stdout.flush()
-            #sys.stdout.write('\n')
+            self.msgout.write(*args)
+            self.msgout.flush()
+            #self.msgout.write('\n')
         except UnicodeError:
             pass
 
