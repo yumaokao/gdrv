@@ -13,52 +13,53 @@ Version
 Usage
 =====
 
-Quick Start
+Installation
 -----------
 * Install with pip/pip2
-  .. code:: sh
+.. code-block:: sh
 
   $ sudo pip2 install -U gdrv
 
-
+Quick Start
+-----------
 * Open the oauth link and grant google drive permission for this gdrv.
-  .. code:: sh
+.. code-block:: sh
 
   $ gdrv init
 
 * List files and directories in your google drive root directory.
-  code:: sh
+.. code-block:: sh
 
   $ gdrv list /
 
 * Make a new directory 'uploads' in your google drive root directory.
-  code:: sh
+.. code-block:: sh
 
   $ gdrv mkdir /uploads
 
 * Push a local file 'LOCALFILE' to your google drive 'uploads' directory.
-  code:: sh
+.. code-block:: sh
 
   $ gdrv push LOCALFILE /uploads
 
 * Pull files with a printer-liked prompt to $PWD.
-  code:: sh
+.. code-block:: sh
 
   $ gdrv pull /uploads/
 
 * Throw files to your google drive trash can.
-  code:: sh
+.. code-block:: sh
 
   $ gdrv trash /uploads/
 
 * Share the file to 'everyone' who has the url link of this file.
-  code:: sh
+.. code-block:: sh
 
   $ gdrv share /uploads/LOCALFILE
   $ gdrv url /uploads/LOCALFILE
 
 * Online playing a media file.
-  code:: sh
+.. code-block:: sh
 
   $ gdrv pull /uploads/SOME.mp4 -o - | mplayer -
 
