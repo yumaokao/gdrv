@@ -16,12 +16,13 @@ Usage
 Quick Start
 -----------
 * Install with pip/pip2
-  code:: sh
+  .. code:: sh
 
   $ sudo pip2 install -U gdrv
 
+
 * Open the oauth link and grant google drive permission for this gdrv.
-  code:: sh
+  .. code:: sh
 
   $ gdrv init
 
