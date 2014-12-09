@@ -15,14 +15,14 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.tools import run
 
 lg = logging.getLogger("DRIVE.INIT")
-#lg.setLevel(logging.INFO)
+# lg.setLevel(logging.INFO)
 
 
 class CommandInit(DriveServiceCommand):
     """ A Drive Command Class """
 
     def init_cmdparser(self):
-        ## python2.7 lack of aliases of add_parser in sub command.
+        # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('init',
                                                    help='command list help')
         self.cmdparser.add_argument('queries', nargs='?',
@@ -35,7 +35,7 @@ class CommandInit(DriveServiceCommand):
                                     help='logical operator between query'
                                          'strings')
 
-        ### for query string composing ###
+        # ## for query string composing ## #
         self.cmdparser.add_argument('-t', '--title', nargs='*',
                                     help='title of the file')
         self.cmdparser.add_argument('-f', '--full-text', nargs='*',
@@ -47,21 +47,20 @@ class CommandInit(DriveServiceCommand):
         lg.debug(self.args)
         lg.debug("YMK dump config api ")
         lg.debug(gm.config.items('api'))
+        scopes = "https://docs.google.com/feeds"
 
         flow = OAuth2WebServerFlow(client_id=gm.config.get('api', 'client_id'),
-                                   client_secret=
-                                   gm.config.get('api', 'client_secret'),
-                                   scope=gm.config.get('api', 'scope'),
+                                   client_secret=gm.config.get('api', 'client_secret'),
+                                   scope=scopes,
                                    redirect_uri="http://127.0.0.1")
 
         self.get_credentials()
         if self.credentials is None or self.credentials.invalid:
-            auth_uri = flow.step1_get_authorize_url()
-            print "Please goto this link: [%s]" % auth_uri
-            webbrowser.open_new_tab(auth_uri)
-            ## YMK TODO: a http web page with clipbaord js for easy copy
-            code = raw_input("Enter verrification code: ").strip()
-            self.credentials = flow.step2_exchange(code)
+            flow_info = flow.step1_get_device_and_user_codes()
+            webbrowser.open_new_tab(flow_info.verification_url)
+            print("Enter verrification code in url {0}: {1}".format(flow_info.verification_url, flow_info.user_code))
+            raw_input("Then press any key to continue...".format(flow_info.user_code))
+            self.credentials = flow.step2_exchange(device_flow_info=flow_info)
             if self.credentials:
                 filename = os.path.expanduser(gm.config.get('api', 'storage'))
                 dirname = os.path.dirname(filename)
@@ -76,7 +75,7 @@ class CommandInit(DriveServiceCommand):
     def do_service_command(self):
         self.print_about(self.service)
 
-## private methods ##
+# ## private methods ##
     def print_about(self, service):
         """Print information about the user along with the Drive API settings.
 
