@@ -1,18 +1,12 @@
-#!/usr/bin/env python
-
-# Execute with
-# $ python youtube_dl/__main__.py (2.6+)
-# $ python -m youtube_dl          (2.7+)
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 
 import sys
+import os
+from . import gdrv
 
-if __package__ is None and not hasattr(sys, "frozen"):
-    # direct call of __main__.py
-    import os.path
-    path = os.path.realpath(os.path.abspath(__file__))
-    sys.path.append(os.path.dirname(os.path.dirname(path)))
+path = os.path.realpath(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(os.path.dirname(path)))
 
-import gdrv
-
-if __name__ == '__main__':
-    gdrv.main.main()
+gdrv.main()

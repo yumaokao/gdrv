@@ -1,6 +1,7 @@
 *.py[cod]
 credentials.dat
 *.swp
+.env
 
 # C extensions
 *.so
