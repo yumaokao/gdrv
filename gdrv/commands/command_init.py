@@ -4,7 +4,7 @@ import os
 import logging
 import webbrowser
 import httplib2
-import global_mod as gm
+from gdrv import global_mod as gm
 from command_base import DriveServiceCommand
 
 from apiclient import errors

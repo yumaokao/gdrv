@@ -4,20 +4,20 @@ import os
 import sys
 import fnmatch
 import logging
-import global_mod as gm
+# from gdrv import global_mod as gm
 from colorama import Fore, Style
 from apiclient import errors
 from command_base import DriveServiceCommand
 
 lg = logging.getLogger("DRIVE.LIST")
-#lg.setLevel(logging.INFO)
+# lg.setLevel(logging.INFO)
 
 
 class CommandList(DriveServiceCommand):
     """ A Drive Command Class """
 
     def init_cmdparser(self):
-        ## python2.7 lack of aliases of add_parser in sub command.
+        # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('list',
                                                    help='command list help')
         self.cmdparser.add_argument('src', nargs='+',
@@ -36,15 +36,15 @@ class CommandList(DriveServiceCommand):
             sys.exit("No files matched in drive")
 
         self.show_files_info(files)
-        #for pidx in range(len(files)):
-        #    if 'weViewLink' in files[pidx]:
-        #        self.info("%d %s %s" % (pidx, files[pidx]['title'], files[pidx]['webViewLink']))
-        #    elif 'webContentLink' in files[pidx]:
-        #        self.info("%d %s %s" % (pidx, files[pidx]['title'], files[pidx]['webContentLink']))
-        #    else:
-        #        self.info("%d %s %s %s" % (pidx, files[pidx]['title'], files[pidx]['id'], files[pidx]['ownerNames'][0]))
+        # for pidx in range(len(files)):
+        #     if 'weViewLink' in files[pidx]:
+        #         self.info("%d %s %s" % (pidx, files[pidx]['title'], files[pidx]['webViewLink']))
+        #     elif 'webContentLink' in files[pidx]:
+        #         self.info("%d %s %s" % (pidx, files[pidx]['title'], files[pidx]['webContentLink']))
+        #     else:
+        #         self.info("%d %s %s %s" % (pidx, files[pidx]['title'], files[pidx]['id'], files[pidx]['ownerNames'][0]))
 
-## private methods ##
+# ## private methods ##
     def get_all_src_files(self, psrc, hidedir=False):
         allfiles = []
         for asrc in psrc:
@@ -58,10 +58,10 @@ class CommandList(DriveServiceCommand):
         return allfiles
 
     def show_files_info(self, pfiles, pnum=False, plong=False):
-        #if pnum is False:
-        #    if plong is False:
-        #        for apf in pfiles:
-        #            self.info()
+        # if pnum is False:
+        #     if plong is False:
+        #         for apf in pfiles:
+        #             self.info()
 
         if plong is False:
             for pidx in range(len(pfiles)):

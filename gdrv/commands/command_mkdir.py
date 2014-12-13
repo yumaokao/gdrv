@@ -4,23 +4,23 @@ import os
 import sys
 import logging
 import progressbar
-import global_mod as gm
+from gdrv import global_mod as gm
 from apiclient import errors
 from apiclient.http import MediaFileUpload
 from command_base import DriveServiceCommand
 
 lg = logging.getLogger("DRIVE.MKDIR")
-#lg.setLevel(logging.INFO)
+# lg.setLevel(logging.INFO)
 
 
 class CommandMkdir(DriveServiceCommand):
     """ A Drive Command Class """
 
     def init_cmdparser(self):
-        ## python2.7 lack of aliases of add_parser in sub command.
+        # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('mkdir',
                                                    help='command mkdir help')
-        ### for query string composing ###
+        # ## for query string composing ###
         self.cmdparser.add_argument('dst', nargs=1,
                                     help='desination')
         self.cmdparser.add_argument('-p', '--prarents', nargs=1,
@@ -33,7 +33,7 @@ class CommandMkdir(DriveServiceCommand):
 
         lg.debug("YMK in do_command")
         lg.debug(self.args)
-        #sys.stderr.write("YMK STDERR\n")
+        # sys.stderr.write("YMK STDERR\n")
 
         newdir = os.path.split(self.args.dst[0])
         if newdir[1] == "":
@@ -50,7 +50,7 @@ class CommandMkdir(DriveServiceCommand):
 
         dirid = self.dir_insert(newdir[1], parentid)
 
-## private methods ##
+# ## private methods ##
     def dir_insert(self, dirname, parent_id):
         """Insert new directory.
 

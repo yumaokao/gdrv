@@ -4,20 +4,20 @@ import os
 import sys
 import fnmatch
 import logging
-import global_mod as gm
+from gdrv import global_mod as gm
 from apiclient import errors
 from command_base import DriveServiceCommand
 from command_list import CommandList
 
 lg = logging.getLogger("DRIVE.SHARE")
-#lg.setLevel(logging.INFO)
+# lg.setLevel(logging.INFO)
 
 
 class CommandShare(CommandList):
     """ A Drive Command Class """
 
     def init_cmdparser(self):
-        ## python2.7 lack of aliases of add_parser in sub command.
+        # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('share',
                                                    help='command share help')
         self.cmdparser.add_argument('src', nargs='+',
@@ -67,7 +67,7 @@ class CommandShare(CommandList):
                     self.info("sharing %s" % sfiles[aidx]['title'])
                     self.share_a_file(sfiles[aidx]['id'])
 
-## private methods ##
+# ## private methods ##
     def share_a_file(self, pfid, pvalue=None, ptype='anyone', prole='reader'):
         nperm = {
             'value': pvalue,

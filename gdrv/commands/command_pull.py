@@ -7,20 +7,20 @@ import urllib2
 import fnmatch
 import colorama
 import progressbar
-import global_mod as gm
+from gdrv import global_mod as gm
 from apiclient import errors
-#from command_base import DriveServiceCommand
+# from command_base import DriveServiceCommand
 from command_list import CommandList
 
 lg = logging.getLogger("DRIVE.PULL")
-#lg.setLevel(logging.INFO)
+# lg.setLevel(logging.INFO)
 
 
 class CommandPull(CommandList):
     """ A Drive Command Class """
 
     def init_cmdparser(self):
-        ## python2.7 lack of aliases of add_parser in sub command.
+        # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('pull',
                                                    help='command pull help')
         self.cmdparser.add_argument('src', nargs='+',
@@ -37,7 +37,7 @@ class CommandPull(CommandList):
             if self.args.output[0] == '-':
                 self.msgout = sys.stderr
 
-        #lg.debug(self.args)
+        # lg.debug(self.args)
         pulls = self.get_all_src_files(self.args.src, hidedir=True)
 
         if len(pulls) == 0:
@@ -48,7 +48,7 @@ class CommandPull(CommandList):
         self.show_files_info(pulls, pnum=True)
         inpstr = self.choose_files(pulls)
         allidxs = self.parse_input_string(inpstr, len(pulls))
-        if not self.args.output is None:
+        if self.args.output is not None:
             if not len(allidxs) == 1:
                 lg.error("Mutilple output filenames not yet supported")
             else:
@@ -58,16 +58,16 @@ class CommandPull(CommandList):
             for pidx in allidxs:
                 self.pull_a_file(pulls[pidx])
 
-## private methods ##
+# ## private methods ##
     def pull_a_file(self, pfile, pname=None):
-        #lg.debug("title %s url %s" % (pfile['title'], pfile['downloadUrl']))
+        # lg.debug("title %s url %s" % (pfile['title'], pfile['downloadUrl']))
         try:
             auth = {}
             self.credentials.apply(auth)
-            #lg.debug("auth header %s" % auth)
+            # lg.debug("auth header %s" % auth)
             req = urllib2.Request(pfile['downloadUrl'])
             for key, val in auth.iteritems():
-                #lg.debug("auth header key %s val %s" % (key, val))
+                # lg.debug("auth header key %s val %s" % (key, val))
                 req.add_header(key, val)
             res = urllib2.urlopen(req)
         except urllib2.HTTPError, e:
@@ -78,8 +78,8 @@ class CommandPull(CommandList):
             http_size = int(res.info().getheader('Content-Length').strip())
         else:
             http_size = int(pfile['fileSize'])
-        #drive_size = int(pfile['fileSize'])
-        #lg.debug("size http %d drive %d" % (http_size, drive_size))
+        # drive_size = int(pfile['fileSize'])
+        # lg.debug("size http %d drive %d" % (http_size, drive_size))
 
         self.info("%s downloading ..." % pfile['title'])
         if pname is None:
@@ -88,10 +88,10 @@ class CommandPull(CommandList):
             tmpfile = "%s.part" % pname
         size = http_size
         chunk_size = 1024 * 1024
-        #with open(tmpfile, 'w') as fout:
+        # with open(tmpfile, 'w') as fout:
         try:
-            #lg.debug("[%s]" % pname)
-            if not pname is None and pname == '-':
+            # lg.debug("[%s]" % pname)
+            if pname is not None and pname == '-':
                 fout = sys.stdout
             else:
                 fout = open(tmpfile, 'w')
@@ -103,7 +103,7 @@ class CommandPull(CommandList):
             buf = res.read(chunk_size)
             while buf != "":
                 pull_size += len(buf)
-                #lg.debug("%d of %d bytes downloaded" % (pull_size, http_size))
+                # lg.debug("%d of %d bytes downloaded" % (pull_size, http_size))
                 pbar.update(pull_size)
                 fout.write(buf)
                 buf = res.read(chunk_size)
@@ -123,4 +123,4 @@ class CommandPull(CommandList):
         else:
             if fout != sys.stdout:
                 os.rename(tmpfile, pfile['title'])
-            #print "%s download completed" % pfile['title']
+            # print "%s download completed" % pfile['title']

@@ -5,13 +5,13 @@ import sys
 import logging
 import fnmatch
 import httplib2
-import global_mod as gm
+from gdrv import global_mod as gm
 from apiclient import errors
 from apiclient.discovery import build
 from oauth2client.file import Storage
 
 lg = logging.getLogger("BASE")
-#lg.setLevel(logging.INFO)
+# lg.setLevel(logging.INFO)
 
 
 class DriveCommand():
@@ -32,7 +32,7 @@ class DriveCommand():
     def do_drive_command(self):
         pass
 
-## base command methods ##
+# ## base command methods ##
     def info(self, *args):
         try:
             self.msgout.write(*args)
@@ -45,7 +45,7 @@ class DriveCommand():
         try:
             self.msgout.write(*args)
             self.msgout.flush()
-            #self.msgout.write('\n')
+            # self.msgout.write('\n')
         except UnicodeError:
             pass
 
@@ -55,8 +55,8 @@ class DriveCommand():
             return range(pmaxlen)
         for acom in pinstr.split(','):
             arange = acom.split('-')
-            #lg.debug("aidx ")
-            #lg.debug(arange)
+            # lg.debug("aidx ")
+            # lg.debug(arange)
             try:
                 if len(arange) == 1:
                     aidx = int(arange[0])
@@ -67,9 +67,9 @@ class DriveCommand():
                     idxs.extend(range(aidx, bidx + 1))
             except ValueError:
                 pass
-            #lg.debug("aidx %d bidx %d") % (aidx, bidx)
-        #ridx = filter(lambda x: x < pmaxlen, idxs)
-        #lg.debug(ridx)
+            # lg.debug("aidx %d bidx %d") % (aidx, bidx)
+        # ridx = filter(lambda x: x < pmaxlen, idxs)
+        # lg.debug(ridx)
         return set(filter(lambda x: x < pmaxlen, idxs))
 
 
@@ -103,7 +103,7 @@ class DriveServiceCommand(DriveCommand):
     def do_service_command(self):
         pass
 
-## helper drive apis ##
+# ## helper drive apis ##
     def find_drive_files(self, psrcdir, pname,
                          hidedir=False, hidetrashed=True):
         matches = []
@@ -129,9 +129,9 @@ class DriveServiceCommand(DriveCommand):
     def find_parent_id(self, pdir, pmkdir=False):
         dirs = pdir.split('/')
         parentid = 'root'
-        #for aidx in range(len(dirs)):
+        # for aidx in range(len(dirs)):
         for adir in dirs:
-            #lg.debug("dirs %s" % (adir))
+            # lg.debug("dirs %s" % (adir))
             if adir == '':
                 continue
             children_dirs = self.check_children_dirs(adir, parentid)
@@ -149,13 +149,13 @@ class DriveServiceCommand(DriveCommand):
         query = "mimeType = 'application/vnd.google-apps.folder'"
         query += " and title = '%s'" % dirname
         query += " and '%s' in parents" % parent
-        #lg.debug("query %s" % query)
+        # lg.debug("query %s" % query)
         children_dirs = self.file_list(query)
-        #for adir in children_dirs:
-        #    lg.debug("children %s id %s" % (adir['title'], adir['id']))
+        # for adir in children_dirs:
+        #     lg.debug("children %s id %s" % (adir['title'], adir['id']))
         return children_dirs
 
-## basic drive apis ##
+# ## basic drive apis ##
     def file_list(self, query=""):
         """Retrieve a list of File resources.
 
@@ -164,7 +164,7 @@ class DriveServiceCommand(DriveCommand):
         Returns:
           List of File resources.
         """
-        #lg.debug("file_list query %s" % query)
+        # lg.debug("file_list query %s" % query)
         result = []
         page_token = None
         while True:
@@ -193,7 +193,7 @@ class DriveServiceCommand(DriveCommand):
         Returns:
           list of file permissions
         """
-        #lg.debug("permission_list query %s" % query)
+        # lg.debug("permission_list query %s" % query)
         result = []
         page_token = None
         while True:

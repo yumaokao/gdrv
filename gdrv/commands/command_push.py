@@ -4,23 +4,23 @@ import os
 import sys
 import logging
 import progressbar
-import global_mod as gm
+# from gdrv import global_mod as gm
 from apiclient import errors
 from apiclient.http import MediaFileUpload
 from command_base import DriveServiceCommand
 
 lg = logging.getLogger("DRIVE.PUSH")
-#lg.setLevel(logging.INFO)
+# lg.setLevel(logging.INFO)
 
 
 class CommandPush(DriveServiceCommand):
     """ A Drive Command Class """
 
     def init_cmdparser(self):
-        ## python2.7 lack of aliases of add_parser in sub command.
+        # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('push',
                                                    help='command push help')
-        ### for query string composing ###
+        # ### for query string composing ###
         self.cmdparser.add_argument('src', nargs='+',
                                     help='source files')
         self.cmdparser.add_argument('dst', nargs=1,
@@ -35,7 +35,7 @@ class CommandPush(DriveServiceCommand):
 
         lg.debug("YMK in do_command")
         lg.debug(self.args)
-        #sys.stderr.write("YMK STDERR\n")
+        # sys.stderr.write("YMK STDERR\n")
 
         if len(self.args.src) > 1:
             if os.path.basename(self.args.dst[0]) != "":
@@ -49,14 +49,14 @@ class CommandPush(DriveServiceCommand):
             lg.error("Can't find directory %s in drive" % self.args.dst[0])
             sys.exit("Can't find directory %s in drive" % self.args.dst[0])
 
-        ## check src files exists in local
+        # ## check src files exists in local
         for src in self.args.src:
             if not os.path.exists(src):
                 lg.error("%s dosen't exists" % src)
                 sys.exit("%s dosen't exists" % src)
 
-        ## TODO check files exist in drive
-        ## TODO to create or update
+        # ## TODO check files exist in drive
+        # ## TODO to create or update
 
         for src in self.args.src:
             if title == "":
@@ -69,7 +69,7 @@ class CommandPush(DriveServiceCommand):
                 lg.debug("File %s pushed in drive as id %s" % (
                     afile['title'], afile['id']))
 
-## private methods ##
+# ## private methods ##
     def file_insert(self, filename, title, parent_id):
         """Insert new file.
 
@@ -82,9 +82,9 @@ class CommandPush(DriveServiceCommand):
         """
 
         media_body = MediaFileUpload(filename, resumable=True)
-        ## TODO: add optioneal properties.
-        #'description': description,
-        #'mimeType': mime_type
+        # ## TODO: add optioneal properties.
+        # 'description': description,
+        # 'mimeType': mime_type
         body = {
             'title': title
         }
@@ -105,7 +105,7 @@ class CommandPush(DriveServiceCommand):
             while res is None:
                 status, res = req.next_chunk()
                 if status:
-                    #lg.debug("%d%% uploaded", int(status.progress() * 100))
+                    # lg.debug("%d%% uploaded", int(status.progress() * 100))
                     pbar.update(int(status.progress() * 100))
             return res
         except errors.HttpError, error:
@@ -116,11 +116,11 @@ class CommandPush(DriveServiceCommand):
         dstdir = os.path.dirname(self.args.dst[0])
         return self.find_parent_id(dstdir)
 
-## not used
+# ## not used
     def get_children_dirs(self, parent="root"):
         query = "mimeType = 'application/vnd.google-apps.folder'"
         query += " and '%s' in parents" % parent
-        #return self.children_list(parent, query)
+        # return self.children_list(parent, query)
         return self.file_list(query)
 
     def get_all_dirs(self):

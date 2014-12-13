@@ -13,9 +13,9 @@ from gdrv import global_mod as gm
 # from gdrv import DriveCommand
 
 from gdrv.commands import *
-from gdrv import command_init, command_list, command_share, command_url
-from gdrv import command_push, command_pull, command_mkdir
-from gdrv import command_search, command_trash
+# from gdrv import command_init, command_list, command_share, command_url
+# from gdrv import command_push, command_pull, command_mkdir
+# from gdrv import command_search, command_trash
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -94,15 +94,16 @@ def main():
     subparser = parser.add_subparsers(help='drive sub command',
                                       dest='command_name')
 
-    drive_commands = {'list': command_list.CommandList(subparser),
-                      'push': command_push.CommandPush(subparser),
-                      'pull': command_pull.CommandPull(subparser),
-                      'mkdir': command_mkdir.CommandMkdir(subparser),
-                      'search': command_search.CommandSearch(subparser),
-                      'trash': command_trash.CommandTrash(subparser),
-                      'url': command_url.CommandUrl(subparser),
-                      'share': command_share.CommandShare(subparser),
-                      'init': command_init.CommandInit(subparser)}
+    # ## YMK TODO: should use factory pattern
+    drive_commands = {'list': CommandList(subparser),
+                      'push': CommandPush(subparser),
+                      'pull': CommandPull(subparser),
+                      'mkdir': CommandMkdir(subparser),
+                      'search': CommandSearch(subparser),
+                      'trash': CommandTrash(subparser),
+                      'url': CommandUrl(subparser),
+                      'share': CommandShare(subparser),
+                      'init': CommandInit(subparser)}
 
     args = parser.parse_args()
     set_logging_level(args.verbose)

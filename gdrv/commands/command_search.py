@@ -1,19 +1,19 @@
 #!/usr/bin/python
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 import logging
-import global_mod as gm
+from gdrv import global_mod as gm
 from apiclient import errors
 from command_base import DriveServiceCommand
 
 lg = logging.getLogger("DRIVE.SEARCH")
-#lg.setLevel(logging.INFO)
+# lg.setLevel(logging.INFO)
 
 
 class CommandSearch(DriveServiceCommand):
     """ A Drive Command Class """
 
     def init_cmdparser(self):
-        ## python2.7 lack of aliases of add_parser in sub command.
+        # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('search',
                                                    help='command search help')
         self.cmdparser.add_argument('queries', nargs='?',
@@ -26,7 +26,7 @@ class CommandSearch(DriveServiceCommand):
                                     help='logical operator between query'
                                          'strings')
 
-        ### for query string composing ###
+        # ### for query string composing ###
         self.cmdparser.add_argument('-t', '--title', nargs='*',
                                     help='title of the file')
         self.cmdparser.add_argument('-f', '--full-text', nargs='*',
@@ -43,9 +43,9 @@ class CommandSearch(DriveServiceCommand):
         files = self.retrieve_files()
         for fl in files:
             print fl
-            #print "%s, %s, %s" % (fl['title'], fl['id'], fl['mimeType'])
+            # print "%s, %s, %s" % (fl['title'], fl['id'], fl['mimeType'])
 
-## private methods ##
+# ## private methods ##
     def retrieve_files(self, query=""):
         """Retrieve a list of File resources.
 
