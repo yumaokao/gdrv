@@ -10,6 +10,9 @@ import colorama
 import ConfigParser
 
 import global_mod as gm
+# from gdrv import DriveCommand
+
+from gdrv.commands import *
 from gdrv import command_init, command_list, command_share, command_url
 from gdrv import command_push, command_pull, command_mkdir
 from gdrv import command_search, command_trash
@@ -38,7 +41,7 @@ def set_logging_level(plevel=0):
             logging.WARNING,
             logging.INFO,
             logging.DEBUG]
-    #print min(plevel, len(lvls) - 1)
+    # print min(plevel, len(lvls) - 1)
     lg.setLevel(lvls[min(plevel, len(lvls) - 1)])
 
 
@@ -56,13 +59,13 @@ def load_default_config():
 def get_config(args=None):
     load_default_config()
 
-    ## YMK TODO: -f filename and -w filename
+    # ## YMK TODO: -f filename and -w filename
     lg.debug("YMK dump config api ")
     lg.debug(gm.config.items('api'))
     last_cfg_name = ""
     for cfg_path in gm.config_paths:
         cfg_name = os.path.expanduser(cfg_path + '.' + gm.app_name + 'rc')
-        #lg.debug("YMK config file check %s", cfg_name)
+        # lg.debug("YMK config file check %s", cfg_name)
         if os.path.exists(cfg_name):
             last_cfg_name = cfg_name
             gm.config.read(cfg_name)
