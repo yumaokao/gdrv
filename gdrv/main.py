@@ -9,7 +9,7 @@ import logging
 import colorama
 import ConfigParser
 
-import global_mod as gm
+from gdrv import global_mod as gm
 # from gdrv import DriveCommand
 
 from gdrv.commands import *
