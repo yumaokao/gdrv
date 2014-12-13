@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 import logging
-from gdrv import global_mod as gm
 from apiclient import errors
 from command_base import DriveServiceCommand
 

@@ -4,7 +4,6 @@ import os
 import logging
 import webbrowser
 import httplib2
-from gdrv import global_mod as gm
 from command_base import DriveServiceCommand
 
 from apiclient import errors
@@ -46,11 +45,11 @@ class CommandInit(DriveServiceCommand):
         lg.debug("YMK in do_command")
         lg.debug(self.args)
         lg.debug("YMK dump config api ")
-        lg.debug(gm.config.items('api'))
+        lg.debug(self.config.items('api'))
         scopes = "https://docs.google.com/feeds"
 
-        flow = OAuth2WebServerFlow(client_id=gm.config.get('api', 'client_id'),
-                                   client_secret=gm.config.get('api', 'client_secret'),
+        flow = OAuth2WebServerFlow(client_id=self.config.get('api', 'client_id'),
+                                   client_secret=self.config.get('api', 'client_secret'),
                                    scope=scopes,
                                    redirect_uri="http://127.0.0.1")
 
@@ -62,7 +61,7 @@ class CommandInit(DriveServiceCommand):
             raw_input("Then press any key to continue...".format(flow_info.user_code))
             self.credentials = flow.step2_exchange(device_flow_info=flow_info)
             if self.credentials:
-                filename = os.path.expanduser(gm.config.get('api', 'storage'))
+                filename = os.path.expanduser(self.config.get('api', 'storage'))
                 dirname = os.path.dirname(filename)
                 if not os.path.exists(dirname):
                     os.makedirs(dirname)

@@ -5,7 +5,6 @@ import sys
 import logging
 import fnmatch
 import httplib2
-from gdrv import global_mod as gm
 from apiclient import errors
 from apiclient.discovery import build
 from oauth2client.file import Storage
@@ -25,7 +24,8 @@ class DriveCommand():
     def init_cmdparser(self):
         self.cmdparser = None
 
-    def do_command(self, args=None):
+    def do_command(self, args=None, config=None):
+        self.config = config
         self.args = args
         self.do_drive_command()
 
@@ -78,7 +78,7 @@ class DriveServiceCommand(DriveCommand):
 
     def get_storage(self):
         self.storage = Storage(
-            os.path.expanduser(gm.config.get('api', 'storage')))
+            os.path.expanduser(self.config.get('api', 'storage')))
 
     def get_credentials(self):
         self.credentials = None

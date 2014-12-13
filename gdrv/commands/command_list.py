@@ -4,7 +4,6 @@ import os
 import sys
 import fnmatch
 import logging
-# from gdrv import global_mod as gm
 from colorama import Fore, Style
 from apiclient import errors
 from command_base import DriveServiceCommand

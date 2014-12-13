@@ -94,6 +94,8 @@ def main():
     subparser = parser.add_subparsers(help='drive sub command',
                                       dest='command_name')
 
+    subparser.add_parser('ftp', help='interactive mode like sftp, lftp')
+
     # ## YMK TODO: should use factory pattern
     drive_commands = {'list': CommandList(subparser),
                       'push': CommandPush(subparser),
@@ -110,9 +112,12 @@ def main():
 
     get_config(args)
 
-    colorama.init()
-    drive_commands[args.command_name].do_command(args)
-    colorama.deinit()
+    if args.command_name == 'ftp':
+        print("YMK args.command_name {0}".format(args.command_name))
+    else:
+        colorama.init()
+        drive_commands[args.command_name].do_command(args, gm.config)
+        colorama.deinit()
 
 
 if __name__ == '__main__':

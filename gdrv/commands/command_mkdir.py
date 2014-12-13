@@ -4,7 +4,6 @@ import os
 import sys
 import logging
 import progressbar
-from gdrv import global_mod as gm
 from apiclient import errors
 from apiclient.http import MediaFileUpload
 from command_base import DriveServiceCommand

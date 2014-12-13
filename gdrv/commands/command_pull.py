@@ -7,7 +7,6 @@ import urllib2
 import fnmatch
 import colorama
 import progressbar
-from gdrv import global_mod as gm
 from apiclient import errors
 # from command_base import DriveServiceCommand
 from command_list import CommandList
