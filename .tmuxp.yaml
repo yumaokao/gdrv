@@ -1,0 +1,20 @@
+session_name: gdrv
+start_directory: ./ # load session relative to config location (project root).
+
+windows:
+- window_name: gits
+  focus: true
+  panes:
+  - blank
+
+- window_name: notes
+  panes:
+  - blank
+
+- window_name: vim
+  panes:
+  - blank
+
+- window_name: run
+  panes:
+  - blank

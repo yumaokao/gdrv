@@ -1,6 +1,26 @@
 gdrv NOTES
 ==========
 
+virtualenv
+----------
+* install
+  code:: sh
+
+  $ yaourt virtualenv
+
+* usage
+  code:: sh
+
+  # build
+  $ virtualenv .env
+
+  # enter
+  $ source .env/bin/activate
+
+  # exit
+  $ deactivate
+
+
 PIP
 ---
 * quick package and upload
