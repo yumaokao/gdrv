@@ -52,7 +52,11 @@ PIP
   code:: sh
 
     vim ~/.pypirc
-    [pypi]username:Yu.Mao.Kao
+    [pypi]
+    username:Yu.Mao.Kao
+    password:XXXXXXXX
+    [server-login]
+    username:Yu.Mao.Kao
     password:XXXXXXXX
 
 EXECUTE
