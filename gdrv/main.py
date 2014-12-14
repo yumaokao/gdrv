@@ -10,6 +10,7 @@ import colorama
 import ConfigParser
 
 from gdrv import global_mod as gm
+from gdrv.ftp import DriveFtp
 from gdrv.commands import *
 
 
@@ -115,6 +116,7 @@ def main():
 
     if args.command_name == 'ftp':
         print("YMK args.command_name {0}".format(args.command_name))
+        DriveFtp(drive_commands, gm.config).cmdloop()
     else:
         colorama.init()
         drive_commands[args.command_name](args)
