@@ -29,8 +29,14 @@ class DriveCommand():
     def init_cmdparser(self):
         self.cmdparser = None
 
+    def __call__(self, args=None):
+        if args is not None:
+            self.args = args
+        self.do_drive_command()
+
     def do_command(self, args=None):
-        self.args = args
+        if args is not None:
+            self.args = args
         self.do_drive_command()
 
     def do_drive_command(self):

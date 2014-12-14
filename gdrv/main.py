@@ -138,7 +138,8 @@ def main():
         print("YMK args.command_name {0}".format(args.command_name))
     else:
         colorama.init()
-        drive_commands[args.command_name].do_command(args)
+#        drive_commands[args.command_name].do_command(args)
+        drive_commands[args.command_name](args)
         colorama.deinit()
 
 
