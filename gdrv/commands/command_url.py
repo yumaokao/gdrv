@@ -15,8 +15,17 @@ lg = logging.getLogger("DRIVE.URL")
 class CommandUrl(CommandList):
     """ A Drive Command Class """
 
+    @staticmethod
+    def static_add_sub_command_parser(psub_par):
+        cmdparser = psub_par.add_parser('url',
+                                        help='command url help')
+        cmdparser.add_argument('src', nargs='+',
+                               help='patterns to list in google drive')
+
+        cmdparser.add_argument('-a', '--altlink', action='store_true',
+                               help='show alternateLink to redirect google drive file information page')
+
     def init_cmdparser(self):
-        # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('url',
                                                    help='command url help')
         self.cmdparser.add_argument('src', nargs='+',

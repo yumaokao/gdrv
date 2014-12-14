@@ -15,6 +15,19 @@ lg = logging.getLogger("DRIVE.PUSH")
 class CommandPush(DriveServiceCommand):
     """ A Drive Command Class """
 
+    @staticmethod
+    def static_add_sub_command_parser(psub_par):
+        cmdparser = psub_par.add_parser('push',
+                                        help='command push help')
+        # ### for query string composing ###
+        cmdparser.add_argument('src', nargs='+',
+                               help='source files')
+        cmdparser.add_argument('dst', nargs=1,
+                               help='desination')
+        cmdparser.add_argument('-p', '--prarents', nargs=1,
+                               help='no error if existing,'
+                               'make parent directories as needed')
+
     def init_cmdparser(self):
         # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('push',

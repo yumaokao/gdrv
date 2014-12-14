@@ -16,16 +16,20 @@ lg = logging.getLogger("BASE")
 class DriveCommand():
     """ A Drive Command Class """
 
-    def __init__(self, psub_par):
-        self.subparser = psub_par
+    def __init__(self, pconfig):
+        # self.subparser = psub_par
+        self.config = pconfig
         self.msgout = sys.stdout
-        self.init_cmdparser()
+        # self.init_cmdparser()
+
+    @staticmethod
+    def static_add_sub_command_parser(psub_par):
+        pass
 
     def init_cmdparser(self):
         self.cmdparser = None
 
-    def do_command(self, args=None, config=None):
-        self.config = config
+    def do_command(self, args=None):
         self.args = args
         self.do_drive_command()
 

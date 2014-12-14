@@ -97,26 +97,48 @@ def main():
     subparser.add_parser('ftp', help='interactive mode like sftp, lftp')
 
     # ## YMK TODO: should use factory pattern
-    drive_commands = {'list': CommandList(subparser),
-                      'push': CommandPush(subparser),
-                      'pull': CommandPull(subparser),
-                      'mkdir': CommandMkdir(subparser),
-                      'search': CommandSearch(subparser),
-                      'trash': CommandTrash(subparser),
-                      'url': CommandUrl(subparser),
-                      'share': CommandShare(subparser),
-                      'init': CommandInit(subparser)}
+    drive_command_classes = {'list': CommandList,
+                             'push': CommandPush,
+                             'pull': CommandPull,
+                             'mkdir': CommandMkdir,
+                             'search': CommandSearch,
+                             'trash': CommandTrash,
+                             'url': CommandUrl,
+                             'share': CommandShare,
+                             'init': CommandInit}
+#    print("YMK drive_command_classes {0}".format(drive_command_classes))
+#    print("YMK CommandList {0}".format(drive_command_classes['list']))
+    map(lambda (k, ac): ac.static_add_sub_command_parser(subparser),
+        drive_command_classes.iteritems())
+#    drive_commands = map(lambda (k, ac): (ac, ac(gm.config)),
+#                         drive_command_classes.iteritems())
+#    for key, val in enumerate(drive_command_classes):
+#        print("YMK class {0}:{1}".format(key, val))
+#        drive_command_classes[val].static_add_sub_command_parser()
+
+#     drive_commands = {'list': CommandList(subparser, gm.config),
+#                       'push': CommandPush(subparser, gm.config),
+#                       'pull': CommandPull(subparser, gm.config),
+#                       'mkdir': CommandMkdir(subparser, gm.config),
+#                       'search': CommandSearch(subparser, gm.config),
+#                       'trash': CommandTrash(subparser, gm.config),
+#                       'url': CommandUrl(subparser, gm.config),
+#                       'share': CommandShare(subparser, gm.config),
+#                       'init': CommandInit(subparser, gm.config)}
 
     args = parser.parse_args()
     set_logging_level(args.verbose)
 
     get_config(args)
 
+    drive_commands = dict((val, drive_command_classes[val](gm.config))
+                          for (key, val) in enumerate(drive_command_classes))
+
     if args.command_name == 'ftp':
         print("YMK args.command_name {0}".format(args.command_name))
     else:
         colorama.init()
-        drive_commands[args.command_name].do_command(args, gm.config)
+        drive_commands[args.command_name].do_command(args)
         colorama.deinit()
 
 

@@ -20,6 +20,28 @@ lg = logging.getLogger("DRIVE.INIT")
 class CommandInit(DriveServiceCommand):
     """ A Drive Command Class """
 
+    @staticmethod
+    def static_add_sub_command_parser(psub_par):
+        # ## python2.7 lack of aliases of add_parser in sub command.
+        cmdparser = psub_par.add_parser('init',
+                                        help='command list help')
+        cmdparser.add_argument('queries', nargs='?',
+                               help='other query string for search files')
+        cmdparser.add_argument('-m', '--max-results',
+                               type=int, default=100,
+                               help='maximum number of files to return')
+        cmdparser.add_argument('-o', '--operator',
+                               choices=['and', 'or'], default='and',
+                               help='logical operator between query'
+                               'strings')
+
+        # ## for query string composing ## #
+        cmdparser.add_argument('-t', '--title', nargs='*',
+                               help='title of the file')
+        cmdparser.add_argument('-f', '--full-text', nargs='*',
+                               help='full text of the file including'
+                               'title, description, and content')
+
     def init_cmdparser(self):
         # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('init',

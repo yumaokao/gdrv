@@ -17,6 +17,13 @@ lg = logging.getLogger("DRIVE.TRASH")
 class CommandTrash(CommandList):
     """ A Drive Command Class """
 
+    @staticmethod
+    def static_add_sub_command_parser(psub_par):
+        cmdparser = psub_par.add_parser('trash',
+                                        help='command trash help')
+        cmdparser.add_argument('src', nargs='+',
+                               help='google drive files')
+
     def init_cmdparser(self):
         # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('trash',

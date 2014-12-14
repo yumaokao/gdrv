@@ -15,6 +15,13 @@ lg = logging.getLogger("DRIVE.LIST")
 class CommandList(DriveServiceCommand):
     """ A Drive Command Class """
 
+    @staticmethod
+    def static_add_sub_command_parser(psub_par):
+        cmdparser = psub_par.add_parser('list',
+                                        help='command list help')
+        cmdparser.add_argument('src', nargs='+',
+                               help='patterns to list in google drive')
+
     def init_cmdparser(self):
         # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('list',

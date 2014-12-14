@@ -18,6 +18,15 @@ lg = logging.getLogger("DRIVE.PULL")
 class CommandPull(CommandList):
     """ A Drive Command Class """
 
+    @staticmethod
+    def static_add_sub_command_parser(psub_par):
+        cmdparser = psub_par.add_parser('pull',
+                                        help='command pull help')
+        cmdparser.add_argument('src', nargs='+',
+                               help='google drive files')
+        cmdparser.add_argument('-o', '--output', nargs=1,
+                               help='desination')
+
     def init_cmdparser(self):
         # ## python2.7 lack of aliases of add_parser in sub command.
         self.cmdparser = self.subparser.add_parser('pull',
