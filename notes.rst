@@ -29,6 +29,7 @@ PIP
     $ python setup.py sdist
     $ python setup.py sdist upload
     $ pip install -U gdrv
+    $ sudo pip install -U --force-reinstall gdrv
 
   from start could reference hitchhiker_
 
