@@ -25,16 +25,6 @@ class CommandShare(CommandList):
         cmdparser.add_argument('-u', '--unshare', action='store_true',
                                help='unshare files')
 
-    def init_cmdparser(self):
-        # ## python2.7 lack of aliases of add_parser in sub command.
-        self.cmdparser = self.subparser.add_parser('share',
-                                                   help='command share help')
-        self.cmdparser.add_argument('src', nargs='+',
-                                    help='patterns to list in google drive')
-
-        self.cmdparser.add_argument('-u', '--unshare', action='store_true',
-                                    help='unshare files')
-
     def do_service_command(self):
         """share files
         """

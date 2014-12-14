@@ -24,13 +24,6 @@ class CommandTrash(CommandList):
         cmdparser.add_argument('src', nargs='+',
                                help='google drive files')
 
-    def init_cmdparser(self):
-        # ## python2.7 lack of aliases of add_parser in sub command.
-        self.cmdparser = self.subparser.add_parser('trash',
-                                                   help='command trash help')
-        self.cmdparser.add_argument('src', nargs='+',
-                                    help='google drive files')
-
     def do_service_command(self):
         """trash files
         """

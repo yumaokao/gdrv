@@ -28,19 +28,6 @@ class CommandPush(DriveServiceCommand):
                                help='no error if existing,'
                                'make parent directories as needed')
 
-    def init_cmdparser(self):
-        # ## python2.7 lack of aliases of add_parser in sub command.
-        self.cmdparser = self.subparser.add_parser('push',
-                                                   help='command push help')
-        # ### for query string composing ###
-        self.cmdparser.add_argument('src', nargs='+',
-                                    help='source files')
-        self.cmdparser.add_argument('dst', nargs=1,
-                                    help='desination')
-        self.cmdparser.add_argument('-p', '--prarents', nargs=1,
-                                    help='no error if existing,'
-                                         'make parent directories as needed')
-
     def do_service_command(self):
         """push files
         """

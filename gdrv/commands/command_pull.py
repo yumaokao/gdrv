@@ -27,15 +27,6 @@ class CommandPull(CommandList):
         cmdparser.add_argument('-o', '--output', nargs=1,
                                help='desination')
 
-    def init_cmdparser(self):
-        # ## python2.7 lack of aliases of add_parser in sub command.
-        self.cmdparser = self.subparser.add_parser('pull',
-                                                   help='command pull help')
-        self.cmdparser.add_argument('src', nargs='+',
-                                    help='google drive files')
-        self.cmdparser.add_argument('-o', '--output', nargs=1,
-                                    help='desination')
-
     def do_service_command(self):
         """pull files
         """

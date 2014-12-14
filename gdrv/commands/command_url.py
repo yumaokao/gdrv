@@ -25,15 +25,6 @@ class CommandUrl(CommandList):
         cmdparser.add_argument('-a', '--altlink', action='store_true',
                                help='show alternateLink to redirect google drive file information page')
 
-    def init_cmdparser(self):
-        self.cmdparser = self.subparser.add_parser('url',
-                                                   help='command url help')
-        self.cmdparser.add_argument('src', nargs='+',
-                                    help='patterns to list in google drive')
-
-        self.cmdparser.add_argument('-a', '--altlink', action='store_true',
-                                    help='show alternateLink to redirect google drive file information page')
-
     def do_service_command(self):
         """url files
         """

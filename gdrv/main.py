@@ -10,12 +10,8 @@ import colorama
 import ConfigParser
 
 from gdrv import global_mod as gm
-# from gdrv import DriveCommand
-
 from gdrv.commands import *
-# from gdrv import command_init, command_list, command_share, command_url
-# from gdrv import command_push, command_pull, command_mkdir
-# from gdrv import command_search, command_trash
+
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -106,25 +102,8 @@ def main():
                              'url': CommandUrl,
                              'share': CommandShare,
                              'init': CommandInit}
-#    print("YMK drive_command_classes {0}".format(drive_command_classes))
-#    print("YMK CommandList {0}".format(drive_command_classes['list']))
     map(lambda (k, ac): ac.static_add_sub_command_parser(subparser),
         drive_command_classes.iteritems())
-#    drive_commands = map(lambda (k, ac): (ac, ac(gm.config)),
-#                         drive_command_classes.iteritems())
-#    for key, val in enumerate(drive_command_classes):
-#        print("YMK class {0}:{1}".format(key, val))
-#        drive_command_classes[val].static_add_sub_command_parser()
-
-#     drive_commands = {'list': CommandList(subparser, gm.config),
-#                       'push': CommandPush(subparser, gm.config),
-#                       'pull': CommandPull(subparser, gm.config),
-#                       'mkdir': CommandMkdir(subparser, gm.config),
-#                       'search': CommandSearch(subparser, gm.config),
-#                       'trash': CommandTrash(subparser, gm.config),
-#                       'url': CommandUrl(subparser, gm.config),
-#                       'share': CommandShare(subparser, gm.config),
-#                       'init': CommandInit(subparser, gm.config)}
 
     args = parser.parse_args()
     set_logging_level(args.verbose)
@@ -138,7 +117,6 @@ def main():
         print("YMK args.command_name {0}".format(args.command_name))
     else:
         colorama.init()
-#        drive_commands[args.command_name].do_command(args)
         drive_commands[args.command_name](args)
         colorama.deinit()
 

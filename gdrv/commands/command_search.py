@@ -32,27 +32,6 @@ class CommandSearch(DriveServiceCommand):
                                help='full text of the file including'
                                'title, description, and content')
 
-    def init_cmdparser(self):
-        # ## python2.7 lack of aliases of add_parser in sub command.
-        self.cmdparser = self.subparser.add_parser('search',
-                                                   help='command search help')
-        self.cmdparser.add_argument('queries', nargs='?',
-                                    help='other query string for search files')
-        self.cmdparser.add_argument('-m', '--max-results',
-                                    type=int, default=100,
-                                    help='maximum number of files to return')
-        self.cmdparser.add_argument('-o', '--operator',
-                                    choices=['and', 'or'], default='and',
-                                    help='logical operator between query'
-                                         'strings')
-
-        # ### for query string composing ###
-        self.cmdparser.add_argument('-t', '--title', nargs='*',
-                                    help='title of the file')
-        self.cmdparser.add_argument('-f', '--full-text', nargs='*',
-                                    help='full text of the file including'
-                                         'title, description, and content')
-
     def do_service_command(self):
         """list files
         """

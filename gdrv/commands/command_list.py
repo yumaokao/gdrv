@@ -22,13 +22,6 @@ class CommandList(DriveServiceCommand):
         cmdparser.add_argument('src', nargs='+',
                                help='patterns to list in google drive')
 
-    def init_cmdparser(self):
-        # ## python2.7 lack of aliases of add_parser in sub command.
-        self.cmdparser = self.subparser.add_parser('list',
-                                                   help='command list help')
-        self.cmdparser.add_argument('src', nargs='+',
-                                    help='patterns to list in google drive')
-
     def do_service_command(self):
         """list files
         """
