@@ -6,7 +6,8 @@ from cmd import Cmd
 
 
 def real_do_gdrv(line):
-    print("YMK do_gdrv")
+    global these_names
+    print("YMK do_gdrv dir() {0}".format(these_names))
 
 
 def real_complete_gdrv(text, line, begidx, endidx):
@@ -41,6 +42,8 @@ class DriveFtp(Cmd):
     def do_EOF(self, line):
         return True
 
+
+these_names = dir()
 
 # if __name__ == '__main__':
 #    DriveFtp().cmdloop()
