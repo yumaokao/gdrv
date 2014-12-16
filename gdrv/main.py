@@ -116,7 +116,7 @@ def main():
 
     if args.command_name == 'ftp':
         print("YMK args.command_name {0}".format(args.command_name))
-        DriveFtp(drive_commands, gm.config).cmdloop()
+        DriveFtp(drive_commands, gm.config, parser).cmdloop()
     else:
         colorama.init()
         drive_commands[args.command_name](args)
