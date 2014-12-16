@@ -6,8 +6,7 @@ from cmd import Cmd
 
 
 def real_do_gdrv(line):
-    global these_names
-    print("YMK do_gdrv dir() {0}".format(these_names))
+    print("YMK do_gdrv")
 
 
 def real_complete_gdrv(text, line, begidx, endidx):
@@ -28,7 +27,8 @@ class DriveFtp(Cmd):
 #        return ["ymk", "exit", "gdrv"]
 
     def get_names(self):
-        return ["do_ymk", "do_exit", "do_gdrv", "do_help"]
+        return dir(self)
+#        return ["do_ymk", "do_exit", "do_gdrv", "do_help"]
 
     def do_ymk(self, line):
         print("YMK FTP get_names() {0}".format(self.get_names()))
@@ -42,8 +42,6 @@ class DriveFtp(Cmd):
     def do_EOF(self, line):
         return True
 
-
-these_names = dir()
 
 # if __name__ == '__main__':
 #    DriveFtp().cmdloop()
