@@ -49,6 +49,23 @@ class DriveFtp(Cmd):
         args = self.parser.parse_args()
         self.commands['init'](args)
 
+# ##################
+#   ### TRANSFOR ###
+# ##################
+#   ### pull ###
+    def do_pull(self, line):
+        # print(Fore.BLUE + "GDRV PULL: {0}".format(line) + Style.RESET_ALL)
+        inodes = filter(lambda i: i['title'] == line, self.cache_inodes)
+        if len(inodes) == 1:
+            # print("url {0}".format(inodes[0]))
+            self.commands['pull'].get_service()
+            self.commands['pull'].pull_a_file(inodes[0])
+        else:
+            print("No such file or directory")
+
+    def complete_pull(self, text, line, begidx, endidx):
+        return filter(lambda i: i.startswith(text), self.cache_files)
+
 # ################
 #   ### REMOTE ###
 # ################
@@ -97,8 +114,7 @@ class DriveFtp(Cmd):
     def complete_cd(self, text, line, begidx, endidx):
         if text.endswith('..'):
             return [text + '/']
-        dirs = filter(lambda i: i.startswith(text), self.cache_dirs)
-        return dirs
+        return filter(lambda i: i.startswith(text), self.cache_dirs)
 
 # ###############
 #   ### LOCAL ###

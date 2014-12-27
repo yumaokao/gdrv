@@ -64,7 +64,11 @@ class CommandPull(CommandList):
             auth = {}
             self.credentials.apply(auth)
             # lg.debug("auth header %s" % auth)
-            req = urllib2.Request(pfile['downloadUrl'])
+            url = pfile.get('downloadUrl')
+            if url is None:
+                url = pfile['exportLinks']['application/pdf']
+
+            req = urllib2.Request(url)
             for key, val in auth.iteritems():
                 # lg.debug("auth header key %s val %s" % (key, val))
                 req.add_header(key, val)
@@ -76,7 +80,8 @@ class CommandPull(CommandList):
         if res.info().getheader('Content-Length') is not None:
             http_size = int(res.info().getheader('Content-Length').strip())
         else:
-            http_size = int(pfile['fileSize'])
+            file_size = pfile.get('fileSize')
+            http_size = 1024 * 1024 * 1024 if file_size is None else int(file_size)
         # drive_size = int(pfile['fileSize'])
         # lg.debug("size http %d drive %d" % (http_size, drive_size))
 
@@ -116,7 +121,7 @@ class CommandPull(CommandList):
             if not fout == sys.stdout:
                 fout.close()
 
-        if pull_size != http_size:
+        if pull_size != http_size and http_size != 1024 * 1024 * 1024:
             lg.warn("only %d of %d bytes downloaded, maybe incompleted" %
                     (pull_size, http_size))
         else:
