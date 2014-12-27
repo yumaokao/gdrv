@@ -3,7 +3,7 @@
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 
 from os import getcwd, listdir, chdir
-from os.path import isabs, isdir, isfile, join, split, normpath
+from os.path import isabs, isdir, isfile, join, split, normpath, basename
 from colorama import Fore, Style
 from cmd import Cmd
 
@@ -26,6 +26,7 @@ class DriveFtp(Cmd):
         self.config = config
         self.parser = parser
         self.pwd = '/'
+        self.parentid = 'root'
         # YMK: local should be fast enough
         # self.cache_lpwd = getcwd()
         # self.cache_files = None
@@ -66,6 +67,30 @@ class DriveFtp(Cmd):
     def complete_pull(self, text, line, begidx, endidx):
         return filter(lambda i: i.startswith(text), self.cache_files)
 
+#   ### push ###
+    def do_push(self, line):
+        # print(Fore.BLUE + "GDRV PUSH: {0}".format(line) + Style.RESET_ALL)
+        lfile = join(getcwd(), line)
+        if isfile(lfile):
+            self.commands['push'].get_service()
+            self.commands['push'].file_insert(lfile, basename(lfile), self.parentid)
+        else:
+            print("No such file or directory")
+
+    def complete_push(self, text, line, begidx, endidx):
+        cwd = getcwd()
+        bname = text
+        if text.endswith('..'):
+            return [text + '/']
+        if len(line.split()) > 1:
+            (dname, bname) = split(line.split()[1])
+            newdir = join(getcwd(), dname)
+            # print("newdir {0}".format(newdir))
+            if isdir(newdir):
+                cwd = newdir
+        inodes = filter(lambda i: i.startswith(bname), listdir(cwd))
+        return inodes
+
 # ################
 #   ### REMOTE ###
 # ################
@@ -75,7 +100,7 @@ class DriveFtp(Cmd):
 
 #   ### ls ###
     def do_ls(self, line):
-        # print("YMK ls in {0}".format(self.pwd))
+        print("YMK ls in {0} parentid {1}".format(self.pwd, self.parentid))
         # args = self.parser.parse_args(("list {0}".format(self.pwd)).split())
         # print("YMK ls args {0}".format(args))
         self.commands['list'].get_service()
@@ -100,16 +125,12 @@ class DriveFtp(Cmd):
     def do_cd(self, line):
         # print("YMK ls in {0}".format(self.pwd))
         self.commands['list'].get_service()
-        if isabs(line):
-            dirn = line if line.endswith('/') else line + '/'
-            if self.commands['list'].find_parent_id(dirn):
-                self.pwd = line
-        else:
-            newpwd = normpath(join(self.pwd, line))
-            # print("YMK ls newpwd in {0}".format(newpwd))
-            dirn = newpwd if newpwd.endswith('/') else newpwd + '/'
-            if self.commands['list'].find_parent_id(dirn):
-                self.pwd = newpwd
+        newpwd = line if isabs(line) else normpath(join(self.pwd, line))
+        dirn = newpwd if newpwd.endswith('/') else newpwd + '/'
+        parentid = self.commands['list'].find_parent_id(dirn)
+        if parentid is not None:
+            self.pwd = newpwd
+            self.parentid = parentid
 
     def complete_cd(self, text, line, begidx, endidx):
         if text.endswith('..'):
