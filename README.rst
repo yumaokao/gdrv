@@ -8,7 +8,7 @@ Yu Mao Kao (yumaokao)
 
 Version
 =======
-0.1.5
+0.2.0
 
 Usage
 =====
@@ -26,6 +26,16 @@ Quick Start
 .. code-block:: sh
 
   $ gdrv init
+
+* simple sftp/lftp like ftp command line mode
+.. code-block:: sh
+
+  $ gdrv ftp
+  gdrv>
+  gdrv> help
+  gdrv> <Tab>
+  gdrv> ls
+  gdrv> pull <Tab>
 
 * List files and directories in your google drive root directory.
 .. code-block:: sh
