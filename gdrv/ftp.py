@@ -3,7 +3,7 @@
 # vim:fileencoding=UTF-8:ts=4:sw=4:sta:et:sts=4:ai
 
 from os import getcwd, listdir, chdir
-from os.path import isdir, join, isfile, split
+from os.path import isabs, isdir, isfile, join, split, normpath
 from colorama import Fore, Style
 from cmd import Cmd
 
@@ -62,7 +62,7 @@ class DriveFtp(Cmd):
         # args = self.parser.parse_args(("list {0}".format(self.pwd)).split())
         # print("YMK ls args {0}".format(args))
         self.commands['list'].get_service()
-        self.cache_inodes = self.commands['list'].get_all_src_files(self.pwd)
+        self.cache_inodes = self.commands['list'].get_all_children(self.pwd)
         self.cache_dirs = filter(lambda i:
                                  i['mimeType'] == 'application/vnd.google-apps.folder',
                                  self.cache_inodes)
@@ -81,11 +81,24 @@ class DriveFtp(Cmd):
 
 #   ### cd ###
     def do_cd(self, line):
-        print("YMK ls in {0}".format(self.pwd))
-        self.pwd = line
+        # print("YMK ls in {0}".format(self.pwd))
+        self.commands['list'].get_service()
+        if isabs(line):
+            dirn = line if line.endswith('/') else line + '/'
+            if self.commands['list'].find_parent_id(dirn):
+                self.pwd = line
+        else:
+            newpwd = normpath(join(self.pwd, line))
+            # print("YMK ls newpwd in {0}".format(newpwd))
+            dirn = newpwd if newpwd.endswith('/') else newpwd + '/'
+            if self.commands['list'].find_parent_id(dirn):
+                self.pwd = newpwd
 
     def complete_cd(self, text, line, begidx, endidx):
-        return ["yumaokao", "yumao.kao", "yumaokao74", "ymk74"]
+        if text.endswith('..'):
+            return [text + '/']
+        dirs = filter(lambda i: i.startswith(text), self.cache_dirs)
+        return dirs
 
 # ###############
 #   ### LOCAL ###
