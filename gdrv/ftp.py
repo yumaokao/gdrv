@@ -56,7 +56,10 @@ class DriveFtp(Cmd):
 #   ### pull ###
     def do_pull(self, line):
         # print(Fore.BLUE + "GDRV PULL: {0}".format(line) + Style.RESET_ALL)
-        inodes = filter(lambda i: i['title'] == line, self.cache_inodes)
+        inodes = filter(lambda i:
+                        i['title'] == line and
+                        i['mimeType'] != 'application/vnd.google-apps.folder',
+                        self.cache_inodes)
         if len(inodes) == 1:
             # print("url {0}".format(inodes[0]))
             self.commands['pull'].get_service()
@@ -100,7 +103,7 @@ class DriveFtp(Cmd):
 
 #   ### ls ###
     def do_ls(self, line):
-        print("YMK ls in {0} parentid {1}".format(self.pwd, self.parentid))
+        # print("YMK ls in {0} parentid {1}".format(self.pwd, self.parentid))
         # args = self.parser.parse_args(("list {0}".format(self.pwd)).split())
         # print("YMK ls args {0}".format(args))
         self.commands['list'].get_service()
@@ -136,6 +139,21 @@ class DriveFtp(Cmd):
         if text.endswith('..'):
             return [text + '/']
         return filter(lambda i: i.startswith(text), self.cache_dirs)
+
+#   ### trash ###
+    def do_trash(self, line):
+        # print(Fore.BLUE + "GDRV TRASH: {0}".format(line) + Style.RESET_ALL)
+        inodes = filter(lambda i: i['title'] == line, self.cache_inodes)
+        if len(inodes) == 1:
+            # print("url {0}".format(inodes[0]))
+            self.commands['trash'].get_service()
+            self.commands['trash'].trash_a_file(inodes[0])
+        else:
+            print("No such file or directory")
+
+    def complete_trash(self, text, line, begidx, endidx):
+        return (filter(lambda i: i.startswith(text), self.cache_dirs)
+                + filter(lambda i: i.startswith(text), self.cache_files))
 
 # ###############
 #   ### LOCAL ###
