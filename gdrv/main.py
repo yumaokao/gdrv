@@ -114,13 +114,13 @@ def main():
     drive_commands = dict((val, drive_command_classes[val](gm.config))
                           for (key, val) in enumerate(drive_command_classes))
 
+    colorama.init(autoreset=False)
     if args.command_name == 'ftp':
         print("YMK args.command_name {0}".format(args.command_name))
         DriveFtp(drive_commands, gm.config, parser).cmdloop()
     else:
-        colorama.init()
         drive_commands[args.command_name](args)
-        colorama.deinit()
+    colorama.deinit()
 
 
 if __name__ == '__main__':
