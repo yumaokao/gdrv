@@ -37,6 +37,10 @@ class CommandUrl(CommandList):
         if len(files) == 0:
             sys.exit("No files matched in drive")
 
+        self.url_files(files)
+
+# ## private methods ##
+    def url_files(self, files):
         for pidx in range(len(files)):
             perms = self.permission_list(files[pidx]['id'])
             perms = filter(lambda p: p['type'] == 'anyone', perms)
@@ -58,5 +62,3 @@ class CommandUrl(CommandList):
 
             self.info("%2d %s \n  (%s)  %s" % (pidx, files[pidx]['title'], shared, link))
 
-
-# ## private methods ##

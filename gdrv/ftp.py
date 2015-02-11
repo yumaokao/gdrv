@@ -167,6 +167,20 @@ class DriveFtp(Cmd):
         return (filter(lambda i: i.startswith(text), self.cache_dirs)
                 + filter(lambda i: i.startswith(text), self.cache_files))
 
+#   ### url ###
+    def do_url(self, line):
+        pline = self.pwd if line == "" else line
+        self.commands['url'].get_service()
+        files = self.commands['url'].get_all_src_files(pline)
+        if len(files) == 0:
+            print("No files matched in drive")
+        else:
+            self.commands['url'].url_files(files)
+
+    def complete_url(self, text, line, begidx, endidx):
+        return (filter(lambda i: i.startswith(text), self.cache_dirs)
+                + filter(lambda i: i.startswith(text), self.cache_files))
+
 # ###############
 #   ### LOCAL ###
 # ###############
