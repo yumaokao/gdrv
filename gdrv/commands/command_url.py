@@ -22,8 +22,8 @@ class CommandUrl(CommandList):
         cmdparser.add_argument('src', nargs='+',
                                help='patterns to list in google drive')
 
-        cmdparser.add_argument('-a', '--altlink', action='store_true',
-                               help='show alternateLink to redirect google drive file information page')
+        # cmdparser.add_argument('-a', '--altlink', action='store_true',
+        #                       help='show alternateLink to redirect google drive file information page')
 
     def do_service_command(self):
         """url files
@@ -50,7 +50,7 @@ class CommandUrl(CommandList):
             #     lg.debug("a perm kind %s type %s role %s" % (aperm['kind'], aperm['type'], aperm['role']))
 
             # TODO list display
-            if 'webContentLink' in files[pidx] and not self.args.altlink:
+            if 'webContentLink' in files[pidx]:
                 link = files[pidx]['webContentLink']
                 # self.info("%d %s wcl %s" % (pidx, files[pidx]['title'], files[pidx]['webContentLink']))
             elif 'alternateLink' in files[pidx]:

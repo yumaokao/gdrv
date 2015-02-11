@@ -170,8 +170,10 @@ class DriveFtp(Cmd):
 #   ### url ###
     def do_url(self, line):
         pline = self.pwd if line == "" else line
+        pline = pline if pline.endswith('/') else pline + '/'
+        print("pline {0}".format(pline))
         self.commands['url'].get_service()
-        files = self.commands['url'].get_all_src_files(pline)
+        files = self.commands['url'].get_all_src_files(pline.split(), False)
         if len(files) == 0:
             print("No files matched in drive")
         else:
