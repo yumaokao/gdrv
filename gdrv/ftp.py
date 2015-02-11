@@ -140,6 +140,18 @@ class DriveFtp(Cmd):
             return [text + '/']
         return filter(lambda i: i.startswith(text), self.cache_dirs)
 
+#   ### mkdir ###
+    def do_mkdir(self, line):
+        # print("YMK ls in {0}".format(self.pwd))
+        self.commands['mkdir'].get_service()
+        ndir = self.commands['mkdir'].dir_insert(line, self.parentid)
+        if ndir is None:
+            print("Could not new directory '{0}'", line)
+
+    def complete_mkdir(self, text, line, begidx, endidx):
+        return (filter(lambda i: i.startswith(text), self.cache_dirs)
+                + filter(lambda i: i.startswith(text), self.cache_files))
+
 #   ### trash ###
     def do_trash(self, line):
         # print(Fore.BLUE + "GDRV TRASH: {0}".format(line) + Style.RESET_ALL)
