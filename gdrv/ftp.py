@@ -169,17 +169,46 @@ class DriveFtp(Cmd):
 
 #   ### url ###
     def do_url(self, line):
-        pline = self.pwd if line == "" else line
-        pline = pline if pline.endswith('/') else pline + '/'
-        print("pline {0}".format(pline))
         self.commands['url'].get_service()
-        files = self.commands['url'].get_all_src_files(pline.split(), False)
+        pwd = self.pwd + '/' if not self.pwd.endswith('/') else self.pwd
+        pline = pwd if line == "" else line
+        if pline.endswith('/'):
+            inodes = self.commands['url'].get_all_src_files(pline.split(), False)
+        else:
+            inodes = filter(lambda i: i['title'] == pline, self.cache_inodes)
+
+        if len(inodes) == 0:
+            print("No files matched in drive")
+        else:
+            self.commands['url'].url_files(inodes)
+
+    def complete_url(self, text, line, begidx, endidx):
+        return (filter(lambda i: i.startswith(text), self.cache_dirs)
+                + filter(lambda i: i.startswith(text), self.cache_files))
+
+#   ### share ###
+    def do_share(self, line):
+        # pline = self.pwd if line == "" else line
+        # pline = pline if pline.endswith('/') else pline + '/'
+        self.commands['share'].get_service()
+        files = filter(lambda i: i['title'] == line, self.cache_inodes)
+        # files = self.commands['share'].get_all_src_files(pline.split(), False)
         if len(files) == 0:
             print("No files matched in drive")
         else:
-            self.commands['url'].url_files(files)
+            for afile in files:
+                perms = self.commands['share'].permission_list(afile['id'])
+                perms = filter(lambda p: p['type'] == 'anyone', perms)
+                shared = 'shared' if len(perms) > 0 else ''
+                # print(" file {0} id {1} share [{2}]".format(afile['title'], afile['id'], shared))
+                if not shared:
+                    self.commands['share'].share_a_file(afile['id'])
+                    print("shared {0}".format(afile['title']))
+                else:
+                    self.commands['share'].unshare_a_file(afile['id'])
+                    print("unshared {0}".format(afile['title']))
 
-    def complete_url(self, text, line, begidx, endidx):
+    def complete_share(self, text, line, begidx, endidx):
         return (filter(lambda i: i.startswith(text), self.cache_dirs)
                 + filter(lambda i: i.startswith(text), self.cache_files))
 
