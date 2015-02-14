@@ -8,7 +8,7 @@ Yu Mao Kao (yumaokao)
 
 Version
 =======
-0.2.0
+0.2.1
 
 Usage
 =====
