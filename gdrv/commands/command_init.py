@@ -65,7 +65,7 @@ class CommandInit(DriveServiceCommand):
 
             auth_uri = flow.step1_get_authorize_url()
             webbrowser.open_new_tab(auth_uri)
-            print("Please goto this link: [%s]".format(auth_uri))
+            print("Please goto this link: [{}]".format(auth_uri))
             code = raw_input("Enter verrification code: ").strip()
             self.credentials = flow.step2_exchange(code)
             if self.credentials:
