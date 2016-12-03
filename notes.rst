@@ -95,7 +95,7 @@ TODO
 * [%] 2014-05-18 make list looks good
 * [%] 2014-05-18 make url looks good
 * [$] 2014-05-18 ~ 2014-12-27 manual in github README.md
-* [ ] 2014-12-27 ftp mode
+* [$] 2014-12-27 ~ 2016-12-04 ftp mode
 
 Q&A
 ---

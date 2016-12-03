@@ -47,20 +47,27 @@ class CommandInit(DriveServiceCommand):
         lg.debug(self.args)
         lg.debug("YMK dump config api ")
         lg.debug(self.config.items('api'))
-        scopes = "https://docs.google.com/feeds"
 
         flow = OAuth2WebServerFlow(client_id=self.config.get('api', 'client_id'),
                                    client_secret=self.config.get('api', 'client_secret'),
-                                   scope=scopes,
-                                   redirect_uri="http://127.0.0.1")
+                                   scope=self.config.get('api', 'scope'),
+                                   redirect_uri="urn:ietf:wg:oauth:2.0:oob")
 
         self.get_credentials()
         if self.credentials is None or self.credentials.invalid:
-            flow_info = flow.step1_get_device_and_user_codes()
-            webbrowser.open_new_tab(flow_info.verification_url)
-            print("Enter verrification code in url {0}: {1}".format(flow_info.verification_url, flow_info.user_code))
-            raw_input("Then press any key to continue...".format(flow_info.user_code))
-            self.credentials = flow.step2_exchange(device_flow_info=flow_info)
+            # YMK: this flow no longer works
+
+            # flow_info = flow.step1_get_device_and_user_codes()
+            # webbrowser.open_new_tab(flow_info.verification_url)
+            # print("Enter verrification code in url {0}: {1}".format(flow_info.verification_url, flow_info.user_code))
+            # raw_input("Then press any key to continue...".format(flow_info.user_code))
+            # self.credentials = flow.step2_exchange(device_flow_info=flow_info)
+
+            auth_uri = flow.step1_get_authorize_url()
+            webbrowser.open_new_tab(auth_uri)
+            print("Please goto this link: [%s]".format(auth_uri))
+            code = raw_input("Enter verrification code: ").strip()
+            self.credentials = flow.step2_exchange(code)
             if self.credentials:
                 filename = os.path.expanduser(self.config.get('api', 'storage'))
                 dirname = os.path.dirname(filename)
